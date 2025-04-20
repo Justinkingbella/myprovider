@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
@@ -18,6 +19,7 @@ import {
 import SocialButtons from "./social-buttons";
 import { userRegistrationSchema } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
+import VerificationStep from "./verification-step";
 
 export default function SignUpForm() {
   const [firstName, setFirstName] = useState("");
@@ -28,6 +30,7 @@ export default function SignUpForm() {
   const [terms, setTerms] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showVerification, setShowVerification] = useState(false);
   
   const { toast } = useToast();
   const [, setLocation] = useLocation();
@@ -68,61 +71,19 @@ export default function SignUpForm() {
         lastName,
       });
       
-      // Proceed without immediate email verification
-      // We'll rely on the webhook to handle user creation in our database
-      
-      // Send verification email in the background
+      // Prepare verification with email code
       await signUp.prepareEmailAddressVerification({
         strategy: "email_code",
       });
       
-      // Since we're not waiting for verification, create a placeholder result
-      const verificationResult = {
-        status: "complete",
-        createdUserId: signUp.createdUserId,
-      };
+      // Show verification step
+      setShowVerification(true);
       
-      // User has been created and email verification initiated in the background
-      if (verificationResult.createdUserId) {
-        // Store user role to be used after verification
-        localStorage.setItem("pendingUserRole", role);
-        
-        // Create user in our database
-        try {
-          await apiRequest("POST", "/api/users", {
-            username: email.split("@")[0],
-            email,
-            firstName,
-            lastName,
-            clerkId: verificationResult.createdUserId,
-            role,
-          });
-        } catch (dbErr) {
-          console.error("Error creating user in database:", dbErr);
-          // Continue with the flow since the user was created in Clerk
-        }
-        
-        toast({
-          title: "Account created successfully!",
-          description: "You can now sign in.",
-        });
-        
-        setFirstName("");
-        setLastName("");
-        setEmail("");
-        setPassword("");
-        setRole("customer");
-        setTerms(false);
-        
-        // Redirect to dashboard or sign-in page
-        setLocation("/dashboard");
-      } else {
-        // User needs to verify their email
-        toast({
-          title: "Verification required",
-          description: "Please check your email to verify your account.",
-        });
-      }
+      toast({
+        title: "Verification email sent",
+        description: "Please check your email for a verification code.",
+      });
+      
     } catch (err: any) {
       console.error("Error during sign up:", err);
       if (err.errors) {
@@ -144,6 +105,18 @@ export default function SignUpForm() {
   const navigateToSignIn = () => {
     setLocation("/sign-in");
   };
+  
+  // If we're in verification stage, show verification component
+  if (showVerification) {
+    return (
+      <VerificationStep 
+        email={email}
+        firstName={firstName}
+        lastName={lastName}
+        role={role}
+      />
+    );
+  }
   
   return (
     <div className="space-y-6">
