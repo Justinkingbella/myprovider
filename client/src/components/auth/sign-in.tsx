@@ -11,22 +11,22 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import SocialButtons from "./social-buttons";
 
 export default function SignInForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("antoniojoaquimjustino@gmail.com");
+  const [password, setPassword] = useState("Mariabella7753M@AJ");
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const { toast } = useToast();
   const [, setLocation] = useLocation();
   const { signIn, isLoaded: isSignInLoaded } = useSignIn();
-  
+
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Reset error
     setError(null);
-    
+
     if (!isSignInLoaded) {
       toast({
         title: "Authentication loading",
@@ -34,33 +34,33 @@ export default function SignInForm() {
       });
       return;
     }
-    
+
     try {
       setIsLoading(true);
-      
+
       console.log("Starting sign in with email:", email);
-      
+
       // Basic validation
       if (!email || !email.includes('@')) {
         setError("Please enter a valid email address");
         setIsLoading(false);
         return;
       }
-      
+
       if (!password || password.length < 8) {
         setError("Password must be at least 8 characters");
         setIsLoading(false);
         return;
       }
-      
+
       // Attempt to sign in
       const result = await signIn.create({
         identifier: email,
         password,
       });
-      
+
       console.log("Sign in result status:", result.status);
-      
+
       if (result.status === "complete") {
         setEmail("");
         setPassword("");
@@ -68,7 +68,7 @@ export default function SignInForm() {
           title: "Welcome back!",
           description: "You have successfully signed in.",
         });
-        
+
         // Redirect to dashboard
         setLocation("/dashboard");
       } else {
@@ -78,7 +78,7 @@ export default function SignInForm() {
       }
     } catch (err: any) {
       console.error("Error during sign in:", err);
-      
+
       // More detailed error handling
       if (err.errors && err.errors.length > 0) {
         setError(err.errors[0].message);
@@ -89,11 +89,11 @@ export default function SignInForm() {
       setIsLoading(false);
     }
   };
-  
+
   const navigateToSignUp = () => {
     setLocation("/sign-up");
   };
-  
+
   return (
     <div className="space-y-6">
       {error && (
@@ -102,7 +102,7 @@ export default function SignInForm() {
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
-      
+
       <form className="space-y-6" onSubmit={handleSignIn}>
         <div>
           <Label htmlFor="email">Email address</Label>
@@ -186,7 +186,7 @@ export default function SignInForm() {
       </div>
 
       <SocialButtons mode="sign-in" />
-      
+
       <div className="text-center text-sm">
         <span className="text-gray-600">Don't have an account? </span>
         <Button 

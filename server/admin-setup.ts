@@ -10,11 +10,12 @@ export async function setupAdminUser() {
       console.log("Creating admin user...");
       await storage.createUser({
         username: "admin",
-        email: "Antoniojoaquimjustino@gmail.com",
+        email: "antoniojoaquimjustino@gmail.com",
         firstName: "Antonio",
         lastName: "Joaquim",
         clerkId: "admin_clerk_id", // This would be the actual Clerk ID in production
         role: "admin",
+        // Password is handled by Clerk, not stored here
       });
       console.log("Admin user created successfully");
     } else {
