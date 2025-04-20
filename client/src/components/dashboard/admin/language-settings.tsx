@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { 
   Card, 
@@ -39,6 +38,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
+import { CardFooter } from "@/components/ui/card";
+import { UploadCloud, Trash2 } from "lucide-react";
 
 export default function LanguageSettings() {
   const [openLanguageDialog, setOpenLanguageDialog] = useState(false);
@@ -46,7 +48,7 @@ export default function LanguageSettings() {
   const [selectedLanguage, setSelectedLanguage] = useState<any>(null);
 
   // Mock data for languages
-  const languages = [
+  const [languages, setLanguages] = useState([
     { 
       id: 1, 
       name: "English", 
@@ -101,7 +103,26 @@ export default function LanguageSettings() {
       translationProgress: 80,
       direction: "ltr"
     },
-  ];
+  ]);
+
+  const [translations, setTranslations] = useState({
+    "welcome_message": {
+      "en": "Welcome to our service platform",
+      "af": "Welkom by ons diensplatform",
+      "ng": "Ounene ku platform yetu yokupondola",
+      "hz": "Pending translation...",
+      "naq": ""
+    },
+    "booking_confirmation": {
+      "en": "Your booking has been confirmed",
+      "af": "Jou bespreking is bevestig",
+      "ng": "Ekwatanepo lyoye olya kolekwa",
+      "hz": "Pending translation...",
+      "naq": ""
+    }
+  });
+
+  const [selectedPhrase, setSelectedPhrase] = useState("welcome_message");
 
   const handleAddLanguage = () => {
     setIsEditing(false);
@@ -115,8 +136,31 @@ export default function LanguageSettings() {
     setOpenLanguageDialog(true);
   };
 
+  const toggleLanguage = (langCode: string) => {
+    setLanguages(languages.map(lang => 
+      lang.code === langCode ? { ...lang, isActive: !lang.isActive } : lang
+    ));
+  };
+
+  const setDefaultLanguage = (langCode: string) => {
+    setLanguages(languages.map(lang => ({ 
+      ...lang, 
+      isDefault: lang.code === langCode 
+    })));
+  };
+
+  const updateTranslation = (langCode: string, value: string) => {
+    setTranslations({
+      ...translations,
+      [selectedPhrase]: {
+        ...translations[selectedPhrase],
+        [langCode]: value
+      }
+    });
+  };
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <Card>
         <CardHeader>
           <CardTitle>Language Settings</CardTitle>
@@ -230,7 +274,7 @@ export default function LanguageSettings() {
               {isEditing ? "Update language settings" : "Add a new language to your platform"}
             </DialogDescription>
           </DialogHeader>
-          
+
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="language-name" className="text-right">
@@ -291,7 +335,7 @@ export default function LanguageSettings() {
               </div>
             </div>
           </div>
-          
+
           <DialogFooter>
             <Button type="button" variant="secondary" onClick={() => setOpenLanguageDialog(false)}>
               Cancel
@@ -302,157 +346,8 @@ export default function LanguageSettings() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
-  );
-}
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Globe, Check, Plus, UploadCloud, Trash2 } from "lucide-react";
 
-export default function LanguageSettings() {
-  // Mock data - in a real app, this would come from API
-  const [languages, setLanguages] = useState([
-    { code: "en", name: "English", isDefault: true, enabled: true, completion: 100 },
-    { code: "af", name: "Afrikaans", isDefault: false, enabled: true, completion: 85 },
-    { code: "ow", name: "Oshiwambo", isDefault: false, enabled: true, completion: 70 },
-    { code: "he", name: "Herero", isDefault: false, enabled: false, completion: 30 },
-    { code: "de", name: "German", isDefault: false, enabled: false, completion: 0 },
-  ]);
-  
-  const [translations, setTranslations] = useState({
-    "welcome_message": {
-      "en": "Welcome to our service platform",
-      "af": "Welkom by ons diensplatform",
-      "ow": "Ounene ku platform yetu yokupondola",
-      "he": "Pending translation...",
-      "de": ""
-    },
-    "booking_confirmation": {
-      "en": "Your booking has been confirmed",
-      "af": "Jou bespreking is bevestig",
-      "ow": "Ekwatanepo lyoye olya kolekwa",
-      "he": "Pending translation...",
-      "de": ""
-    }
-  });
-  
-  const [selectedPhrase, setSelectedPhrase] = useState("welcome_message");
-  
-  const toggleLanguage = (langCode) => {
-    setLanguages(languages.map(lang => 
-      lang.code === langCode ? { ...lang, enabled: !lang.enabled } : lang
-    ));
-  };
-  
-  const setDefaultLanguage = (langCode) => {
-    setLanguages(languages.map(lang => ({ 
-      ...lang, 
-      isDefault: lang.code === langCode 
-    })));
-  };
-  
-  const updateTranslation = (langCode, value) => {
-    setTranslations({
-      ...translations,
-      [selectedPhrase]: {
-        ...translations[selectedPhrase],
-        [langCode]: value
-      }
-    });
-  };
-  
-  return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <Globe className="h-5 w-5 mr-2" />
-            Language Settings
-          </CardTitle>
-          <CardDescription>
-            Manage supported languages and translations for the platform
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="rounded-md border">
-            <table className="min-w-full divide-y divide-border">
-              <thead>
-                <tr className="bg-muted/50">
-                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Language</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Completion</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Default</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="bg-background divide-y divide-border">
-                {languages.map((language) => (
-                  <tr key={language.code}>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <span className="text-sm font-medium">{language.name}</span>
-                        <span className="ml-1 text-xs text-muted-foreground">({language.code})</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <Switch 
-                          checked={language.enabled} 
-                          onCheckedChange={() => toggleLanguage(language.code)}
-                          id={`lang-${language.code}`}
-                        />
-                        <Label htmlFor={`lang-${language.code}`} className="ml-2">
-                          {language.enabled ? 'Enabled' : 'Disabled'}
-                        </Label>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="w-full bg-muted rounded-full h-2.5 mr-2">
-                          <div 
-                            className="bg-primary h-2.5 rounded-full" 
-                            style={{ width: `${language.completion}%` }}
-                          ></div>
-                        </div>
-                        <span className="text-xs text-muted-foreground">{language.completion}%</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <input 
-                          type="radio" 
-                          name="default-language" 
-                          checked={language.isDefault}
-                          onChange={() => setDefaultLanguage(language.code)}
-                          className="rounded-full h-4 w-4 text-primary"
-                        />
-                        {language.isDefault && <span className="ml-2 text-xs text-muted-foreground">Default</span>}
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-muted-foreground">
-                      <Button variant="ghost" size="sm">Edit</Button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          
-          <div className="flex justify-end">
-            <Button variant="outline" className="flex items-center gap-1">
-              <Plus className="h-4 w-4" />
-              Add Language
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-      
+      {/* Translation Manager */}
       <Card>
         <CardHeader>
           <CardTitle>Translation Manager</CardTitle>
@@ -468,7 +363,7 @@ export default function LanguageSettings() {
               <TabsTrigger value="emails">Email Templates</TabsTrigger>
               <TabsTrigger value="import">Import/Export</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="phrases" className="space-y-4 pt-4">
               <div className="flex gap-4">
                 <div className="w-1/3 border rounded-md">
@@ -494,16 +389,16 @@ export default function LanguageSettings() {
                     </Button>
                   </div>
                 </div>
-                
+
                 <div className="w-2/3 space-y-4">
                   <div className="flex justify-between items-center">
                     <h3 className="text-lg font-medium capitalize">{selectedPhrase.replace(/_/g, ' ')}</h3>
                     <Button variant="outline" size="sm">Save All</Button>
                   </div>
-                  
+
                   <div className="space-y-4">
-                    {languages.filter(lang => lang.enabled).map((language) => (
-                      <div key={language.code} className="space-y-2">
+                    {languages.filter(lang => lang.isActive).map((language) => (
+                      <div key={language.id} className="space-y-2">
                         <Label className="flex items-center">
                           <span className="mr-2">{language.name}</span>
                           {language.isDefault && <span className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full">Default</span>}
@@ -520,7 +415,7 @@ export default function LanguageSettings() {
                 </div>
               </div>
             </TabsContent>
-            
+
             <TabsContent value="import" className="space-y-4 pt-4">
               <Card>
                 <CardHeader>
@@ -539,7 +434,7 @@ export default function LanguageSettings() {
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card>
                 <CardHeader>
                   <CardTitle>Export Translations</CardTitle>
@@ -560,7 +455,7 @@ export default function LanguageSettings() {
                         <Button variant="outline" size="sm">Excel</Button>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center justify-between">
                       <div>
                         <h4 className="font-medium">Languages</h4>
@@ -568,7 +463,7 @@ export default function LanguageSettings() {
                       </div>
                       <Button variant="outline" size="sm">All Languages</Button>
                     </div>
-                    
+
                     <Button>Export Translations</Button>
                   </div>
                 </CardContent>
