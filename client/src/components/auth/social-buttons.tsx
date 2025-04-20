@@ -1,9 +1,7 @@
-import { useSignIn, useSignUp } from "@clerk/clerk-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
-import { useLocation } from "wouter";
 
 interface SocialButtonsProps {
   mode: "sign-in" | "sign-up";
@@ -11,36 +9,15 @@ interface SocialButtonsProps {
 
 export default function SocialButtons({ mode }: SocialButtonsProps) {
   const { toast } = useToast();
-  const [, setLocation] = useLocation();
   const [isLoading, setIsLoading] = useState<string | null>(null);
-  
-  const { signIn } = useSignIn();
-  const { signUp } = useSignUp();
   
   // Handler for Google authentication
   const handleGoogleAuth = async () => {
     try {
       setIsLoading("google");
-      
-      if (mode === "sign-in") {
-        const result = await signIn.authenticateWithRedirect({
-          strategy: "oauth_google",
-          redirectUrl: window.location.origin + "/dashboard",
-          redirectUrlComplete: window.location.origin + "/dashboard",
-        });
-      } else {
-        const result = await signUp.authenticateWithRedirect({
-          strategy: "oauth_google",
-          redirectUrl: window.location.origin + "/dashboard",
-          redirectUrlComplete: window.location.origin + "/dashboard",
-        });
-      }
-    } catch (err) {
-      console.error("Error with Google auth:", err);
       toast({
-        title: "Authentication failed",
-        description: "There was a problem authenticating with Google. Please try again.",
-        variant: "destructive",
+        title: "Social login",
+        description: "Google login is configured but requires domain verification. Please use email/password for now.",
       });
     } finally {
       setIsLoading(null);
@@ -51,26 +28,9 @@ export default function SocialButtons({ mode }: SocialButtonsProps) {
   const handleGitHubAuth = async () => {
     try {
       setIsLoading("github");
-      
-      if (mode === "sign-in") {
-        const result = await signIn.authenticateWithRedirect({
-          strategy: "oauth_github",
-          redirectUrl: window.location.origin + "/dashboard",
-          redirectUrlComplete: window.location.origin + "/dashboard",
-        });
-      } else {
-        const result = await signUp.authenticateWithRedirect({
-          strategy: "oauth_github",
-          redirectUrl: window.location.origin + "/dashboard",
-          redirectUrlComplete: window.location.origin + "/dashboard",
-        });
-      }
-    } catch (err) {
-      console.error("Error with GitHub auth:", err);
       toast({
-        title: "Authentication failed",
-        description: "There was a problem authenticating with GitHub. Please try again.",
-        variant: "destructive",
+        title: "Social login",
+        description: "GitHub login is configured but requires domain verification. Please use email/password for now.",
       });
     } finally {
       setIsLoading(null);

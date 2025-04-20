@@ -4,13 +4,14 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAuth } from "./hooks/use-auth";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { 
   ClerkLoaded, 
   ClerkLoading, 
   SignedIn, 
   SignedOut,
-  RedirectToSignIn
+  RedirectToSignIn,
+  useClerk
 } from "@clerk/clerk-react";
 
 // Pages
@@ -68,13 +69,15 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <ClerkLoading>
-          <LoadingSpinner />
-        </ClerkLoading>
-        <ClerkLoaded>
-          <Router />
-        </ClerkLoaded>
-        <Toaster />
+        <div className="app-container">
+          <ClerkLoading>
+            <LoadingSpinner />
+          </ClerkLoading>
+          <ClerkLoaded>
+            <Router />
+          </ClerkLoaded>
+          <Toaster />
+        </div>
       </TooltipProvider>
     </QueryClientProvider>
   );
