@@ -12,6 +12,10 @@ import FavoriteProviders from "./customer/favorite-providers";
 import ProviderMessages from "./customer/provider-messages";
 import CustomerReviews from "./customer/customer-reviews";
 import ReferralRewards from "./customer/referral-rewards";
+import BookingPayments from "./customer/booking-payments";
+import BookingTracking from "./customer/booking-tracking";
+import DisputeReport from "./customer/dispute-report";
+import LoyaltyProgram from "./customer/loyalty-program";
 
 interface CustomerDashboardProps {
   user: UserType | null;
@@ -86,13 +90,17 @@ export default function CustomerDashboard({ user }: CustomerDashboardProps) {
       </div>
 
       <Tabs defaultValue="search" className="space-y-4">
-        <TabsList className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7">
+        <TabsList className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
           <TabsTrigger value="search">Find Services</TabsTrigger>
           <TabsTrigger value="bookings">My Bookings</TabsTrigger>
+          <TabsTrigger value="tracking">Booking Tracking</TabsTrigger>
+          <TabsTrigger value="payments">Payments</TabsTrigger>
           <TabsTrigger value="favorites">Favorites</TabsTrigger>
           <TabsTrigger value="messages">Messages</TabsTrigger>
           <TabsTrigger value="reviews">My Reviews</TabsTrigger>
-          <TabsTrigger value="rewards">Rewards</TabsTrigger>
+          <TabsTrigger value="rewards">Rewards & Loyalty</TabsTrigger>
+          <TabsTrigger value="referrals">Referrals</TabsTrigger>
+          <TabsTrigger value="disputes">Report Issues</TabsTrigger>
           <TabsTrigger value="profile">Profile</TabsTrigger>
         </TabsList>
 
@@ -102,6 +110,14 @@ export default function CustomerDashboard({ user }: CustomerDashboardProps) {
 
         <TabsContent value="bookings" className="space-y-4">
           <CustomerBookings />
+        </TabsContent>
+        
+        <TabsContent value="tracking" className="space-y-4">
+          <BookingTracking />
+        </TabsContent>
+        
+        <TabsContent value="payments" className="space-y-4">
+          <BookingPayments />
         </TabsContent>
 
         <TabsContent value="favorites" className="space-y-4">
@@ -117,7 +133,15 @@ export default function CustomerDashboard({ user }: CustomerDashboardProps) {
         </TabsContent>
 
         <TabsContent value="rewards" className="space-y-4">
+          <LoyaltyProgram />
+        </TabsContent>
+        
+        <TabsContent value="referrals" className="space-y-4">
           <ReferralRewards />
+        </TabsContent>
+        
+        <TabsContent value="disputes" className="space-y-4">
+          <DisputeReport />
         </TabsContent>
 
         <TabsContent value="profile" className="space-y-4">
