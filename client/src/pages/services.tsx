@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLocation } from "wouter";
+import Navbar from "@/components/navigation/navbar";
+import Footer from "@/components/navigation/footer";
 import {
   Search, 
   MapPin, 
@@ -129,23 +131,17 @@ export default function Services() {
   });
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      <Navbar />
+      
       {/* Header */}
-      <header className="bg-yellow-400 py-12 px-4">
+      <header className="bg-white py-12 px-4 border-b border-gray-200">
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center mb-8">
             <div>
               <h1 className="text-3xl font-bold mb-2">Find Services</h1>
-              <p className="text-gray-800">Browse through our comprehensive list of services</p>
+              <p className="text-gray-600">Browse through our comprehensive list of services</p>
             </div>
-            <Button 
-              variant="outline" 
-              className="bg-white mt-4 md:mt-0"
-              onClick={() => setLocation("/")}
-            >
-              <HomeIcon className="mr-2 h-4 w-4" />
-              Back to Home
-            </Button>
           </div>
           
           {/* Search and Filter */}
@@ -305,12 +301,7 @@ export default function Services() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-50 py-8 px-4 border-t border-gray-200">
-        <div className="container mx-auto text-center">
-          <p className="text-gray-500">© 2023 Namibian Service Hub. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

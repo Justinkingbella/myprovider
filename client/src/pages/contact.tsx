@@ -6,7 +6,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useLocation } from "wouter";
-import { HomeIcon, MapPin, Phone, Mail, MessageSquare, CheckCircle } from "lucide-react";
+import { MapPin, Phone, Mail, MessageSquare, CheckCircle } from "lucide-react";
+import Navbar from "@/components/navigation/navbar";
+import Footer from "@/components/navigation/footer";
 
 export default function Contact() {
   const [, setLocation] = useLocation();
@@ -25,23 +27,15 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      <Navbar />
+      
       {/* Header */}
-      <header className="bg-yellow-400 py-12 px-4">
+      <header className="bg-white py-12 px-4 border-b border-gray-200">
         <div className="container mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">Contact Us</h1>
-              <p className="text-gray-800">Get in touch with our team</p>
-            </div>
-            <Button 
-              variant="outline" 
-              className="bg-white mt-4 md:mt-0"
-              onClick={() => setLocation("/")}
-            >
-              <HomeIcon className="mr-2 h-4 w-4" />
-              Back to Home
-            </Button>
+          <div className="text-center">
+            <h1 className="text-3xl font-bold mb-2">Contact Us</h1>
+            <p className="text-gray-600">Get in touch with our team</p>
           </div>
         </div>
       </header>
@@ -58,8 +52,8 @@ export default function Contact() {
                   
                   <div className="space-y-6">
                     <div className="flex items-start">
-                      <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center mr-4 shrink-0">
-                        <MapPin className="h-5 w-5 text-yellow-600" />
+                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4 shrink-0">
+                        <MapPin className="h-5 w-5 text-blue-600" />
                       </div>
                       <div>
                         <h3 className="font-semibold text-lg">Our Location</h3>
@@ -72,8 +66,8 @@ export default function Contact() {
                     </div>
                     
                     <div className="flex items-start">
-                      <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center mr-4 shrink-0">
-                        <Phone className="h-5 w-5 text-yellow-600" />
+                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4 shrink-0">
+                        <Phone className="h-5 w-5 text-blue-600" />
                       </div>
                       <div>
                         <h3 className="font-semibold text-lg">Phone</h3>
@@ -85,8 +79,8 @@ export default function Contact() {
                     </div>
                     
                     <div className="flex items-start">
-                      <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center mr-4 shrink-0">
-                        <Mail className="h-5 w-5 text-yellow-600" />
+                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4 shrink-0">
+                        <Mail className="h-5 w-5 text-blue-600" />
                       </div>
                       <div>
                         <h3 className="font-semibold text-lg">Email</h3>
@@ -98,8 +92,8 @@ export default function Contact() {
                     </div>
                     
                     <div className="flex items-start">
-                      <div className="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center mr-4 shrink-0">
-                        <MessageSquare className="h-5 w-5 text-yellow-600" />
+                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-4 shrink-0">
+                        <MessageSquare className="h-5 w-5 text-blue-600" />
                       </div>
                       <div>
                         <h3 className="font-semibold text-lg">Business Hours</h3>
@@ -223,7 +217,7 @@ export default function Contact() {
                       
                       <Button 
                         type="submit" 
-                        className="w-full bg-yellow-500 hover:bg-yellow-600 text-white"
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                       >
                         Send Message
                       </Button>
@@ -304,12 +298,7 @@ export default function Contact() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-50 py-8 px-4 border-t border-gray-200">
-        <div className="container mx-auto text-center">
-          <p className="text-gray-500">© 2023 Namibian Service Hub. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -2,6 +2,8 @@
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLocation } from "wouter";
+import Navbar from "@/components/navigation/navbar";
+import Footer from "@/components/navigation/footer";
 import {
   Search, 
   Calendar, 
@@ -22,23 +24,15 @@ export default function HowItWorks() {
   const [, setLocation] = useLocation();
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      <Navbar />
+      
       {/* Header */}
-      <header className="bg-yellow-400 py-12 px-4">
+      <header className="bg-white py-12 px-4 border-b border-gray-200">
         <div className="container mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">How It Works</h1>
-              <p className="text-gray-800">Learn how to use Namibian Service Hub as a customer or service provider</p>
-            </div>
-            <Button 
-              variant="outline" 
-              className="bg-white mt-4 md:mt-0"
-              onClick={() => setLocation("/")}
-            >
-              <HomeIcon className="mr-2 h-4 w-4" />
-              Back to Home
-            </Button>
+          <div className="text-center">
+            <h1 className="text-3xl font-bold mb-2">How It Works</h1>
+            <p className="text-gray-600">Learn how to use Namibian Service Hub as a customer or service provider</p>
           </div>
         </div>
       </header>
@@ -487,12 +481,7 @@ export default function HowItWorks() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-50 py-8 px-4 border-t border-gray-200">
-        <div className="container mx-auto text-center">
-          <p className="text-gray-500">© 2023 Namibian Service Hub. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

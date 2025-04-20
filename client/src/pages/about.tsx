@@ -1,29 +1,23 @@
 
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
-import { HomeIcon, Users, Globe, Award, Clock, Shield, Target } from "lucide-react";
+import { Users, Globe, Award, Clock, Shield, Target } from "lucide-react";
+import Navbar from "@/components/navigation/navbar";
+import Footer from "@/components/navigation/footer";
 
 export default function About() {
   const [, setLocation] = useLocation();
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      <Navbar />
+      
       {/* Header */}
-      <header className="bg-yellow-400 py-12 px-4">
+      <header className="bg-white py-12 px-4 border-b border-gray-200">
         <div className="container mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">About Us</h1>
-              <p className="text-gray-800">Learn more about Namibian Service Hub</p>
-            </div>
-            <Button 
-              variant="outline" 
-              className="bg-white mt-4 md:mt-0"
-              onClick={() => setLocation("/")}
-            >
-              <HomeIcon className="mr-2 h-4 w-4" />
-              Back to Home
-            </Button>
+          <div className="text-center">
+            <h1 className="text-3xl font-bold mb-2">About Us</h1>
+            <p className="text-gray-600">Learn more about Namibian Service Hub</p>
           </div>
         </div>
       </header>
@@ -110,26 +104,26 @@ export default function About() {
             
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1 bg-white p-6 rounded-xl shadow-sm text-center">
-                <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Users className="h-6 w-6 text-yellow-600" />
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Users className="h-6 w-6 text-blue-600" />
                 </div>
-                <h3 className="text-3xl font-bold text-yellow-600 mb-2">500+</h3>
+                <h3 className="text-3xl font-bold text-blue-600 mb-2">500+</h3>
                 <p className="text-gray-600">Service Providers</p>
               </div>
               
               <div className="flex-1 bg-white p-6 rounded-xl shadow-sm text-center">
-                <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Globe className="h-6 w-6 text-yellow-600" />
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Globe className="h-6 w-6 text-blue-600" />
                 </div>
-                <h3 className="text-3xl font-bold text-yellow-600 mb-2">14</h3>
+                <h3 className="text-3xl font-bold text-blue-600 mb-2">14</h3>
                 <p className="text-gray-600">Regions Covered</p>
               </div>
               
               <div className="flex-1 bg-white p-6 rounded-xl shadow-sm text-center">
-                <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Award className="h-6 w-6 text-yellow-600" />
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Award className="h-6 w-6 text-blue-600" />
                 </div>
-                <h3 className="text-3xl font-bold text-yellow-600 mb-2">12k+</h3>
+                <h3 className="text-3xl font-bold text-blue-600 mb-2">12k+</h3>
                 <p className="text-gray-600">Completed Jobs</p>
               </div>
             </div>
@@ -147,8 +141,8 @@ export default function About() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="bg-white p-6 rounded-xl shadow-sm">
                 <div className="flex items-start">
-                  <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mr-4">
-                    <Shield className="h-6 w-6 text-yellow-600" />
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                    <Shield className="h-6 w-6 text-blue-600" />
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold mb-2">Trust & Safety</h3>
@@ -205,14 +199,14 @@ export default function About() {
           
           {/* CTA */}
           <section className="max-w-4xl mx-auto mt-16 text-center">
-            <div className="bg-yellow-100 p-8 rounded-xl">
+            <div className="bg-blue-50 p-8 rounded-xl">
               <h2 className="text-2xl font-bold mb-4">Join Our Growing Community</h2>
               <p className="text-gray-600 mb-6">
                 Whether you're looking for services or offering your skills, we invite you to be part of our platform.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button 
-                  className="bg-black text-white hover:bg-gray-800"
+                  className="bg-blue-600 text-white hover:bg-blue-700"
                   onClick={() => setLocation("/sign-up")}
                 >
                   Create an Account
@@ -229,12 +223,7 @@ export default function About() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-50 py-8 px-4 border-t border-gray-200">
-        <div className="container mx-auto text-center">
-          <p className="text-gray-500">© 2023 Namibian Service Hub. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
