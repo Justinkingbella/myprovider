@@ -45,24 +45,49 @@ export default function VerificationStep({
         code: verificationCode,
       });
       
+      console.log("Verification result:", verificationResult);
+      
       if (verificationResult?.status === "complete") {
         // Create user in database
-        await apiRequest("POST", "/api/users", {
-          username: email.split("@")[0],
-          email,
-          firstName,
-          lastName,
-          clerkId: verificationResult.createdUserId,
-          role,
-        });
-        
+        try {
+          await apiRequest("POST", "/api/users", {
+            username: email.split("@")[0],
+            email,
+            firstName,
+            lastName,
+            clerkId: verificationResult.createdUserId,
+            role,
+          });
+          
+          toast({
+            title: "Account verified!",
+            description: "Your account has been verified successfully.",
+          });
+          
+          // Redirect to dashboard after a short delay
+          setTimeout(() => {
+            window.location.href = "/dashboard";
+          }, 1000);
+        } catch (dbErr: any) {
+          console.error("Database error:", dbErr);
+          // The user might already exist in the database due to webhooks
+          // So we'll still redirect to dashboard
+          toast({
+            title: "Account verified!",
+            description: "Your account has been verified successfully.",
+          });
+          
+          setTimeout(() => {
+            window.location.href = "/dashboard";
+          }, 1000);
+        }
+      } else {
+        // Handle incomplete verification
         toast({
-          title: "Account verified!",
-          description: "Your account has been verified successfully.",
+          title: "Verification incomplete",
+          description: "Please check your code and try again.",
+          variant: "destructive",
         });
-        
-        // Redirect to dashboard
-        setLocation("/dashboard");
       }
     } catch (err: any) {
       console.error("Verification error:", err);

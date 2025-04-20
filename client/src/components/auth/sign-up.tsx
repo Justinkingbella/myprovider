@@ -72,17 +72,26 @@ export default function SignUpForm() {
       });
       
       // Prepare verification with email code
-      await signUp.prepareEmailAddressVerification({
-        strategy: "email_code",
-      });
-      
-      // Show verification step
-      setShowVerification(true);
-      
-      toast({
-        title: "Verification email sent",
-        description: "Please check your email for a verification code.",
-      });
+      try {
+        await signUp.prepareEmailAddressVerification({
+          strategy: "email_code",
+        });
+        
+        // Show verification step
+        setShowVerification(true);
+        
+        toast({
+          title: "Verification email sent",
+          description: "Please check your email for a verification code.",
+        });
+      } catch (verificationErr: any) {
+        console.error("Verification preparation error:", verificationErr);
+        toast({
+          title: "Error sending verification",
+          description: verificationErr.message || "Please try again or contact support.",
+          variant: "destructive",
+        });
+      }
       
     } catch (err: any) {
       console.error("Error during sign up:", err);
