@@ -94,7 +94,7 @@ export default function SignUpForm() {
             email,
             firstName,
             lastName,
-            clerkId: result.createdUserId,
+            clerkId: verificationResult.createdUserId,
             role,
           });
         } catch (dbErr) {
