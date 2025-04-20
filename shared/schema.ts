@@ -13,6 +13,8 @@ export const users = pgTable("users", {
   clerkId: text("clerk_id").notNull().unique(),
   phone: text("phone"),
   profileImage: text("profile_image"),
+  bio: text("bio"),
+  address: text("address"),
   role: text("role", { enum: ["admin", "provider", "customer"] }).notNull().default("customer"),
   isVerified: boolean("is_verified").default(false),
   isActive: boolean("is_active").default(true),
@@ -214,6 +216,30 @@ export const insertMessageSchema = createInsertSchema(messages)
     updatedAt: true,
   });
 
+export const insertPromotionSchema = createInsertSchema(promotions)
+  .omit({
+    id: true,
+    createdAt: true,
+    updatedAt: true,
+  });
+
+// Promotions table
+export const promotions = pgTable("promotions", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  code: text("code").notNull().unique(),
+  type: text("type", { enum: ["discount", "referral", "cashback"] }).notNull(),
+  value: decimal("value", { precision: 5, scale: 2 }).notNull(),
+  startDate: timestamp("start_date").notNull(),
+  endDate: timestamp("end_date"),
+  description: text("description"),
+  status: text("status", { enum: ["active", "inactive", "expired"] }).notNull().default("active"),
+  usageLimit: integer("usage_limit"),
+  usageCount: integer("usage_count").default(0),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
 // Schema with validation for user registration
 export const userRegistrationSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters"),
@@ -256,6 +282,9 @@ export type InsertReview = z.infer<typeof insertReviewSchema>;
 
 export type Message = typeof messages.$inferSelect;
 export type InsertMessage = z.infer<typeof insertMessageSchema>;
+
+export type Promotion = typeof promotions.$inferSelect;
+export type InsertPromotion = z.infer<typeof insertPromotionSchema>;
 
 // User registration type
 export type UserRegistration = z.infer<typeof userRegistrationSchema>;
