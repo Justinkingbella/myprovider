@@ -5,6 +5,7 @@ import { insertUserSchema, insertAppointmentSchema, userRegistrationSchema } fro
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
 import { authMiddleware, requireAuth, requireRole } from "./middleware/auth";
+import { Webhook, WebhookRequiredHeaders } from "svix";
 
 // Helper function to handle Zod validation errors
 const handleZodError = (error: unknown, res: Response) => {
@@ -298,9 +299,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const webhookSecret = process.env.CLERK_WEBHOOK_SECRET || "";
       const wh = new Webhook(webhookSecret);
       
-      let evt;
+      let evt: any;
+      
+      // Verify the webhook
       try {
-        // Verify the webhook
         evt = wh.verify(payload, {
           "svix-id": svix_id,
           "svix-timestamp": svix_timestamp,
