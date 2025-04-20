@@ -273,3 +273,256 @@ export default function ServiceLocations() {
     </Card>
   );
 }
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { MapPin, Plus, Trash2, Save } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+export default function ServiceLocations() {
+  // Mock data - in a real app, this would come from API
+  const [regions, setRegions] = useState([
+    { id: 1, name: "Khomas", selected: true },
+    { id: 2, name: "Erongo", selected: false },
+    { id: 3, name: "Oshana", selected: false },
+    { id: 4, name: "Otjozondjupa", selected: false },
+    { id: 5, name: "Hardap", selected: false },
+  ]);
+  
+  const [cities, setCities] = useState([
+    { id: 1, regionId: 1, name: "Windhoek", selected: true },
+    { id: 2, regionId: 1, name: "Ongos", selected: false },
+    { id: 3, regionId: 2, name: "Swakopmund", selected: false },
+    { id: 4, regionId: 2, name: "Walvis Bay", selected: false },
+    { id: 5, regionId: 3, name: "Oshakati", selected: false },
+    { id: 6, regionId: 3, name: "Ondangwa", selected: false },
+  ]);
+  
+  const [customAreas, setCustomAreas] = useState([
+    { id: 1, name: "Windhoek Central", travelCharge: 0 },
+    { id: 2, name: "Khomasdal", travelCharge: 50 },
+    { id: 3, name: "Katutura", travelCharge: 80 },
+  ]);
+  
+  const [newArea, setNewArea] = useState({ name: "", travelCharge: 0 });
+  
+  const toggleRegion = (regionId) => {
+    setRegions(regions.map(region => 
+      region.id === regionId ? { ...region, selected: !region.selected } : region
+    ));
+  };
+  
+  const toggleCity = (cityId) => {
+    setCities(cities.map(city => 
+      city.id === cityId ? { ...city, selected: !city.selected } : city
+    ));
+  };
+  
+  const addCustomArea = () => {
+    if (newArea.name.trim()) {
+      setCustomAreas([
+        ...customAreas,
+        { 
+          id: customAreas.length + 1, 
+          name: newArea.name, 
+          travelCharge: Number(newArea.travelCharge) 
+        }
+      ]);
+      setNewArea({ name: "", travelCharge: 0 });
+    }
+  };
+  
+  const removeCustomArea = (areaId) => {
+    setCustomAreas(customAreas.filter(area => area.id !== areaId));
+  };
+  
+  const updateTravelCharge = (areaId, charge) => {
+    setCustomAreas(customAreas.map(area => 
+      area.id === areaId ? { ...area, travelCharge: Number(charge) } : area
+    ));
+  };
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <MapPin className="h-5 w-5 mr-2" />
+            Service Locations
+          </CardTitle>
+          <CardDescription>
+            Select the regions and cities where you offer your services
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div>
+            <h3 className="text-lg font-medium mb-3">Regions</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {regions.map((region) => (
+                <div key={region.id} className="flex items-center space-x-2">
+                  <Checkbox 
+                    id={`region-${region.id}`}
+                    checked={region.selected}
+                    onCheckedChange={() => toggleRegion(region.id)}
+                  />
+                  <Label htmlFor={`region-${region.id}`}>{region.name}</Label>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div>
+            <h3 className="text-lg font-medium mb-3">Cities & Towns</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {cities.map((city) => (
+                <div key={city.id} className="flex items-center space-x-2">
+                  <Checkbox 
+                    id={`city-${city.id}`}
+                    checked={city.selected}
+                    onCheckedChange={() => toggleCity(city.id)}
+                    disabled={!regions.find(r => r.id === city.regionId)?.selected}
+                  />
+                  <Label 
+                    htmlFor={`city-${city.id}`}
+                    className={!regions.find(r => r.id === city.regionId)?.selected ? "text-muted-foreground" : ""}
+                  >
+                    {city.name}
+                  </Label>
+                </div>
+              ))}
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button>
+            <Save className="h-4 w-4 mr-2" />
+            Save Locations
+          </Button>
+        </CardFooter>
+      </Card>
+      
+      <Card>
+        <CardHeader>
+          <CardTitle>Custom Service Areas</CardTitle>
+          <CardDescription>
+            Define specific areas and travel charges if applicable
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {customAreas.map((area) => (
+              <div key={area.id} className="flex items-center justify-between border-b pb-3">
+                <div className="font-medium">{area.name}</div>
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center">
+                    <span className="text-sm text-muted-foreground mr-2">Travel charge:</span>
+                    <Input 
+                      type="number" 
+                      className="w-20 h-8"
+                      value={area.travelCharge}
+                      onChange={(e) => updateTravelCharge(area.id, e.target.value)}
+                    />
+                    <span className="text-sm text-muted-foreground ml-1">N$</span>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    onClick={() => removeCustomArea(area.id)}
+                  >
+                    <Trash2 className="h-4 w-4 text-muted-foreground" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+            
+            <div className="flex items-center gap-2 pt-2">
+              <Input 
+                placeholder="Area name"
+                value={newArea.name}
+                onChange={(e) => setNewArea({ ...newArea, name: e.target.value })}
+              />
+              <div className="flex items-center">
+                <span className="text-sm text-muted-foreground mr-2">Travel charge:</span>
+                <Input 
+                  type="number" 
+                  className="w-20"
+                  value={newArea.travelCharge}
+                  onChange={(e) => setNewArea({ ...newArea, travelCharge: e.target.value })}
+                />
+                <span className="text-sm text-muted-foreground ml-1">N$</span>
+              </div>
+              <Button 
+                variant="outline" 
+                size="icon"
+                onClick={addCustomArea}
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter>
+          <div className="flex justify-between items-center w-full">
+            <div className="text-sm text-muted-foreground">
+              Travel charges are applied based on service location
+            </div>
+            <Button>Save Changes</Button>
+          </div>
+        </CardFooter>
+      </Card>
+      
+      <Card>
+        <CardHeader>
+          <CardTitle>Travel Distance</CardTitle>
+          <CardDescription>
+            Set how far you're willing to travel for services
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-medium">Maximum Travel Distance</h4>
+                <p className="text-sm text-muted-foreground">How far are you willing to travel for a service</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Select defaultValue="25">
+                  <SelectTrigger className="w-[100px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="5">5</SelectItem>
+                    <SelectItem value="10">10</SelectItem>
+                    <SelectItem value="15">15</SelectItem>
+                    <SelectItem value="25">25</SelectItem>
+                    <SelectItem value="50">50</SelectItem>
+                    <SelectItem value="100">100+</SelectItem>
+                  </SelectContent>
+                </Select>
+                <span className="text-sm text-muted-foreground">km</span>
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-medium">Base Travel Charge</h4>
+                <p className="text-sm text-muted-foreground">Default charge for travel expenses</p>
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="text-sm text-muted-foreground">N$</span>
+                <Input type="number" defaultValue="50" className="w-20" />
+                <span className="text-sm text-muted-foreground">per 10km</span>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button>Save Changes</Button>
+        </CardFooter>
+      </Card>
+    </div>
+  );
+}

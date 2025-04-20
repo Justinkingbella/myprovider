@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { 
   Card, 
@@ -40,7 +39,8 @@ import {
   AlertCircle,
   ChevronDown,
   Check,
-  Clock
+  Clock,
+  CircleDollarSign
 } from "lucide-react";
 
 export default function EarningsPayout() {
@@ -140,7 +140,7 @@ export default function EarningsPayout() {
   // Calculate total earnings
   const totalEarnings = earningsData.reduce((sum, item) => sum + item.amount - item.commission, 0);
   const totalCommission = earningsData.reduce((sum, item) => sum + item.commission, 0);
-  
+
   // Calculate available balance (total earnings minus total withdrawals)
   const totalWithdrawals = withdrawalHistory.reduce((sum, item) => sum + item.amount, 0);
   const availableBalance = totalEarnings - totalWithdrawals;
@@ -151,12 +151,12 @@ export default function EarningsPayout() {
       alert("Please enter a valid amount");
       return;
     }
-    
+
     if (amount > availableBalance) {
       alert("Withdrawal amount exceeds available balance");
       return;
     }
-    
+
     alert(`Withdrawal request for N$${amount} via ${withdrawalMethod === 'bank' ? 'Bank Transfer' : withdrawalMethod === 'ewallet' ? 'EWallet' : 'PayToday'} submitted`);
     // In a real implementation, this would submit the withdrawal request to the backend
   };
@@ -181,7 +181,7 @@ export default function EarningsPayout() {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardContent className="pt-6">
                 <div className="flex flex-col items-center">
@@ -191,7 +191,7 @@ export default function EarningsPayout() {
                 </div>
               </CardContent>
             </Card>
-            
+
             <Card>
               <CardContent className="pt-6">
                 <div className="flex flex-col items-center">
@@ -202,14 +202,14 @@ export default function EarningsPayout() {
               </CardContent>
             </Card>
           </div>
-          
+
           <Tabs defaultValue="earnings" value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="earnings">Earnings History</TabsTrigger>
               <TabsTrigger value="withdrawals">Withdrawal History</TabsTrigger>
               <TabsTrigger value="payout">Request Payout</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="earnings" className="space-y-4">
               <div className="rounded-md border">
                 <Table>
@@ -239,7 +239,7 @@ export default function EarningsPayout() {
                   </TableBody>
                 </Table>
               </div>
-              
+
               <div className="flex justify-end">
                 <Button variant="outline" size="sm">
                   <Download className="h-4 w-4 mr-2" />
@@ -247,7 +247,7 @@ export default function EarningsPayout() {
                 </Button>
               </div>
             </TabsContent>
-            
+
             <TabsContent value="withdrawals" className="space-y-4">
               <div className="rounded-md border">
                 <Table>
@@ -272,7 +272,7 @@ export default function EarningsPayout() {
                 </Table>
               </div>
             </TabsContent>
-            
+
             <TabsContent value="payout" className="space-y-4">
               <Card>
                 <CardContent className="pt-6">
@@ -288,11 +288,11 @@ export default function EarningsPayout() {
                         </p>
                       </div>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <Label htmlFor="amount">Withdrawal Amount (N$)</Label>
                       <div className="flex items-center">
-                        <DollarSign className="h-4 w-4 mr-2 text-muted-foreground" />
+                        <CircleDollarSign className="h-4 w-4 mr-2 text-muted-foreground" />
                         <Input 
                           id="amount" 
                           placeholder="0.00" 
@@ -304,7 +304,7 @@ export default function EarningsPayout() {
                         />
                       </div>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <Label htmlFor="method">Payment Method</Label>
                       <Select value={withdrawalMethod} onValueChange={setWithdrawalMethod}>
@@ -319,7 +319,7 @@ export default function EarningsPayout() {
                         </SelectContent>
                       </Select>
                     </div>
-                    
+
                     {withdrawalMethod === 'bank' && (
                       <div className="space-y-2 p-3 border rounded-md bg-slate-50">
                         <p className="text-sm font-medium">Your Bank Account Details</p>
@@ -330,7 +330,7 @@ export default function EarningsPayout() {
                         </div>
                       </div>
                     )}
-                    
+
                     <Button 
                       className="w-full" 
                       onClick={handleWithdrawalRequest}

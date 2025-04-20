@@ -305,3 +305,278 @@ export default function LanguageSettings() {
     </div>
   );
 }
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Globe, Check, Plus, UploadCloud, Trash2 } from "lucide-react";
+
+export default function LanguageSettings() {
+  // Mock data - in a real app, this would come from API
+  const [languages, setLanguages] = useState([
+    { code: "en", name: "English", isDefault: true, enabled: true, completion: 100 },
+    { code: "af", name: "Afrikaans", isDefault: false, enabled: true, completion: 85 },
+    { code: "ow", name: "Oshiwambo", isDefault: false, enabled: true, completion: 70 },
+    { code: "he", name: "Herero", isDefault: false, enabled: false, completion: 30 },
+    { code: "de", name: "German", isDefault: false, enabled: false, completion: 0 },
+  ]);
+  
+  const [translations, setTranslations] = useState({
+    "welcome_message": {
+      "en": "Welcome to our service platform",
+      "af": "Welkom by ons diensplatform",
+      "ow": "Ounene ku platform yetu yokupondola",
+      "he": "Pending translation...",
+      "de": ""
+    },
+    "booking_confirmation": {
+      "en": "Your booking has been confirmed",
+      "af": "Jou bespreking is bevestig",
+      "ow": "Ekwatanepo lyoye olya kolekwa",
+      "he": "Pending translation...",
+      "de": ""
+    }
+  });
+  
+  const [selectedPhrase, setSelectedPhrase] = useState("welcome_message");
+  
+  const toggleLanguage = (langCode) => {
+    setLanguages(languages.map(lang => 
+      lang.code === langCode ? { ...lang, enabled: !lang.enabled } : lang
+    ));
+  };
+  
+  const setDefaultLanguage = (langCode) => {
+    setLanguages(languages.map(lang => ({ 
+      ...lang, 
+      isDefault: lang.code === langCode 
+    })));
+  };
+  
+  const updateTranslation = (langCode, value) => {
+    setTranslations({
+      ...translations,
+      [selectedPhrase]: {
+        ...translations[selectedPhrase],
+        [langCode]: value
+      }
+    });
+  };
+  
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <Globe className="h-5 w-5 mr-2" />
+            Language Settings
+          </CardTitle>
+          <CardDescription>
+            Manage supported languages and translations for the platform
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="rounded-md border">
+            <table className="min-w-full divide-y divide-border">
+              <thead>
+                <tr className="bg-muted/50">
+                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Language</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Completion</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Default</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="bg-background divide-y divide-border">
+                {languages.map((language) => (
+                  <tr key={language.code}>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <span className="text-sm font-medium">{language.name}</span>
+                        <span className="ml-1 text-xs text-muted-foreground">({language.code})</span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <Switch 
+                          checked={language.enabled} 
+                          onCheckedChange={() => toggleLanguage(language.code)}
+                          id={`lang-${language.code}`}
+                        />
+                        <Label htmlFor={`lang-${language.code}`} className="ml-2">
+                          {language.enabled ? 'Enabled' : 'Disabled'}
+                        </Label>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="w-full bg-muted rounded-full h-2.5 mr-2">
+                          <div 
+                            className="bg-primary h-2.5 rounded-full" 
+                            style={{ width: `${language.completion}%` }}
+                          ></div>
+                        </div>
+                        <span className="text-xs text-muted-foreground">{language.completion}%</span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <input 
+                          type="radio" 
+                          name="default-language" 
+                          checked={language.isDefault}
+                          onChange={() => setDefaultLanguage(language.code)}
+                          className="rounded-full h-4 w-4 text-primary"
+                        />
+                        {language.isDefault && <span className="ml-2 text-xs text-muted-foreground">Default</span>}
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-muted-foreground">
+                      <Button variant="ghost" size="sm">Edit</Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          
+          <div className="flex justify-end">
+            <Button variant="outline" className="flex items-center gap-1">
+              <Plus className="h-4 w-4" />
+              Add Language
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+      
+      <Card>
+        <CardHeader>
+          <CardTitle>Translation Manager</CardTitle>
+          <CardDescription>
+            Edit and manage translations for all supported languages
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Tabs defaultValue="phrases">
+            <TabsList>
+              <TabsTrigger value="phrases">Common Phrases</TabsTrigger>
+              <TabsTrigger value="interface">Interface Elements</TabsTrigger>
+              <TabsTrigger value="emails">Email Templates</TabsTrigger>
+              <TabsTrigger value="import">Import/Export</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="phrases" className="space-y-4 pt-4">
+              <div className="flex gap-4">
+                <div className="w-1/3 border rounded-md">
+                  <div className="p-3 border-b bg-muted/50">
+                    <h3 className="text-sm font-medium">Phrases</h3>
+                  </div>
+                  <div className="divide-y">
+                    {Object.keys(translations).map((key) => (
+                      <div 
+                        key={key}
+                        className={`p-3 cursor-pointer hover:bg-muted/50 ${selectedPhrase === key ? 'bg-muted/50' : ''}`}
+                        onClick={() => setSelectedPhrase(key)}
+                      >
+                        <div className="text-sm font-medium">{key.replace(/_/g, ' ')}</div>
+                        <div className="text-xs text-muted-foreground truncate">{translations[key].en}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="p-3 border-t">
+                    <Button variant="ghost" size="sm" className="w-full flex items-center justify-center gap-1">
+                      <Plus className="h-4 w-4" />
+                      Add New Phrase
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="w-2/3 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-lg font-medium capitalize">{selectedPhrase.replace(/_/g, ' ')}</h3>
+                    <Button variant="outline" size="sm">Save All</Button>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    {languages.filter(lang => lang.enabled).map((language) => (
+                      <div key={language.code} className="space-y-2">
+                        <Label className="flex items-center">
+                          <span className="mr-2">{language.name}</span>
+                          {language.isDefault && <span className="bg-primary/10 text-primary text-xs px-2 py-1 rounded-full">Default</span>}
+                        </Label>
+                        <Textarea 
+                          value={translations[selectedPhrase][language.code] || ''} 
+                          onChange={(e) => updateTranslation(language.code, e.target.value)}
+                          rows={2}
+                          placeholder={`Enter ${language.name} translation`}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="import" className="space-y-4 pt-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Import Translations</CardTitle>
+                  <CardDescription>
+                    Upload translation files in JSON or CSV format
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="border-2 border-dashed rounded-md p-6 text-center">
+                    <UploadCloud className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Drag and drop your translation files here, or click to browse
+                    </p>
+                    <Button variant="outline" size="sm">Select Files</Button>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle>Export Translations</CardTitle>
+                  <CardDescription>
+                    Download current translations in your preferred format
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium">Format</h4>
+                        <p className="text-sm text-muted-foreground">Select the export file format</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm">JSON</Button>
+                        <Button variant="outline" size="sm">CSV</Button>
+                        <Button variant="outline" size="sm">Excel</Button>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium">Languages</h4>
+                        <p className="text-sm text-muted-foreground">Select which languages to export</p>
+                      </div>
+                      <Button variant="outline" size="sm">All Languages</Button>
+                    </div>
+                    
+                    <Button>Export Translations</Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
