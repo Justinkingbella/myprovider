@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -101,9 +100,9 @@ export default function Services() {
   const filteredServices = SERVICES.filter(service => {
     const matchesSearch = service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       service.description.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     const matchesCategory = selectedCategory ? service.category === selectedCategory : true;
-    
+
     return matchesSearch && matchesCategory;
   });
 
