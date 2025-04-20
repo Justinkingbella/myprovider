@@ -1,23 +1,4 @@
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-
-export default function ReferralRewards() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Referrals & Rewards</CardTitle>
-        <CardDescription>
-          Earn rewards by referring friends and view your loyalty points.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="flex items-center justify-center p-6 text-muted-foreground">
-          Referrals and rewards interface will be implemented here.
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -52,7 +33,7 @@ export default function ReferralRewards() {
             Refer a Friend
           </CardTitle>
           <CardDescription>
-            Invite friends and earn N${rewardAmount} credit when they complete their first booking
+            Invite friends and earn NAD ${rewardAmount} credit when they complete their first booking
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -124,7 +105,7 @@ export default function ReferralRewards() {
               <CardContent className="p-4 flex flex-col items-center text-center">
                 <DollarSign className="h-8 w-8 text-primary mb-2 mt-2" />
                 <h3 className="font-medium">Earn Rewards</h3>
-                <p className="text-sm text-muted-foreground">Get N${rewardAmount} when they complete a booking</p>
+                <p className="text-sm text-muted-foreground">Get NAD ${rewardAmount} when they complete a booking</p>
               </CardContent>
             </Card>
           </div>
@@ -163,7 +144,7 @@ export default function ReferralRewards() {
                         {referral.status === 'completed' ? 'Completed' : 'Pending'}
                       </span>
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm">N${referral.reward}</td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm">NAD ${referral.reward}</td>
                   </tr>
                 ))}
               </tbody>

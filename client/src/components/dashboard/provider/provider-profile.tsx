@@ -26,7 +26,7 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Camera, Check, MapPin, Pound, Clock, CreditCard, FileCheck } from "lucide-react";
+import { Camera, Check, MapPin, DollarSign, Clock, CreditCard, FileCheck } from "lucide-react";
 
 interface ProviderProfileProps {
   user: UserType | null;
@@ -156,7 +156,7 @@ export default function ProviderProfile({ user }: ProviderProfileProps) {
                   <div>
                     <Label htmlFor="rate">Hourly Rate (N$)</Label>
                     <div className="flex items-center">
-                      <Pound className="mr-2 h-4 w-4 text-muted-foreground" />
+                      <DollarSign className="mr-2 h-4 w-4 text-muted-foreground" />
                       <Input 
                         id="rate" 
                         placeholder="0.00" 
