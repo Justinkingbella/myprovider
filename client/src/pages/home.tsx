@@ -7,7 +7,7 @@ import {
   Clock, 
   MapPin, 
   CreditCard, 
-  Broom, 
+  Brush, 
   Wrench, 
   Zap, 
   Flower2, 
@@ -234,7 +234,7 @@ export default function Home() {
             {/* Service 1 */}
             <div className="bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-all p-4 text-center transform hover:-translate-y-1">
               <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Broom className="h-6 w-6 text-red-600" />
+                <Brush className="h-6 w-6 text-red-600" />
               </div>
               <h3 className="font-semibold mb-1">Home Cleaning</h3>
               <p className="text-sm text-gray-500">142 providers</p>
