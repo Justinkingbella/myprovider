@@ -13,7 +13,8 @@ import {
   Filter,
   Sliders,
   Star,
-  MapPin
+  MapPin,
+  Trash2
 } from "lucide-react";
 
 import Navbar from "@/components/navigation/navbar";
@@ -111,6 +112,12 @@ export default function Services() {
     // Update URL without page refresh
     const newLocation = category ? `/services?category=${category}` : "/services";
     setLocation(newLocation);
+  };
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setSelectedCategory("");
+    setLocation("/services");
   };
 
   return (
@@ -260,11 +267,7 @@ export default function Services() {
               <p className="text-gray-600">No services found matching your criteria</p>
               <Button 
                 className="mt-4 btn-primary"
-                onClick={() => {
-                  setSearchQuery("");
-                  setSelectedCategory("");
-                  setLocation("/services");
-                }}
+                onClick={clearFilters}
               >
                 Clear Filters
               </Button>

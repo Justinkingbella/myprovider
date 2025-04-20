@@ -72,18 +72,18 @@ export default function SignUpForm() {
         lastName,
       });
       
-      // Prepare verification
-      const { startMagicLinkFlow } = signUp.prepareEmailAddressVerification({
+      // Prepare verification with email code
+      await signUp.prepareEmailAddressVerification({
         strategy: "email_code",
       });
       
-      // Start verification flow
-      const result = await startMagicLinkFlow({
-        redirectUrl: window.location.origin + "/dashboard",
+      // Start verification flow - using the correct method
+      const verificationResult = await signUp.attemptEmailAddressVerification({
+        code: "",
       });
       
       // User has been created and email verification has been initiated
-      if (result.status === "complete") {
+      if (verificationResult.status === "complete") {
         // Store user role to be used after verification
         localStorage.setItem("pendingUserRole", role);
         
@@ -130,6 +130,9 @@ export default function SignUpForm() {
       } else if (err.issues) {
         // Zod validation errors
         setError(err.issues[0]?.message || "Please check your information and try again");
+      } else if (err.message) {
+        // Clerk or other error with a message
+        setError(err.message);
       } else {
         setError("There was a problem creating your account. Please try again.");
       }
