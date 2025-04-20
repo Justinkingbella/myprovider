@@ -1,7 +1,11 @@
 import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertUserSchema, insertAppointmentSchema, userRegistrationSchema } from "@shared/schema";
+import { 
+  insertUserSchema, insertBookingSchema, userRegistrationSchema,
+  insertProviderProfileSchema, insertProviderServiceSchema, insertServiceCategorySchema,
+  insertLocationSchema, insertPaymentSchema, insertReviewSchema
+} from "@shared/schema";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
 import { authMiddleware, requireAuth, requireRole } from "./middleware/auth";
@@ -133,148 +137,148 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Appointment Routes
-  app.post("/api/appointments", requireAuth, async (req: Request, res: Response) => {
+  // Booking Routes
+  app.post("/api/bookings", requireAuth, async (req: Request, res: Response) => {
     try {
       // Validate request body against schema
-      const appointmentData = insertAppointmentSchema.parse(req.body);
+      const bookingData = insertBookingSchema.parse(req.body);
       
-      // Check if user has permission to create this appointment
+      // Check if user has permission to create this booking
       const currentUser = await storage.getUserByClerkId(req.auth.userId);
       if (!currentUser) {
         return res.status(401).json({ message: "Unauthorized" });
       }
       
-      // If customer, can only create appointments for self
-      if (currentUser.role === "customer" && appointmentData.customerId !== currentUser.id) {
-        return res.status(403).json({ message: "You can only create appointments for yourself" });
+      // If customer, can only create bookings for self
+      if (currentUser.role === "customer" && bookingData.customerId !== currentUser.id) {
+        return res.status(403).json({ message: "You can only create bookings for yourself" });
       }
       
-      // If provider, can only create appointments where provider is self
-      if (currentUser.role === "provider" && appointmentData.providerId !== currentUser.id) {
-        return res.status(403).json({ message: "You can only create appointments where you are the provider" });
+      // If provider, can only create bookings where provider is self
+      if (currentUser.role === "provider" && bookingData.providerId !== currentUser.id) {
+        return res.status(403).json({ message: "You can only create bookings where you are the provider" });
       }
       
-      const appointment = await storage.createAppointment(appointmentData);
-      return res.status(201).json(appointment);
+      const booking = await storage.createBooking(bookingData);
+      return res.status(201).json(booking);
     } catch (error) {
       return handleZodError(error, res);
     }
   });
 
-  // Get appointments for current user
-  app.get("/api/appointments/me", requireAuth, async (req: Request, res: Response) => {
+  // Get bookings for current user
+  app.get("/api/bookings/me", requireAuth, async (req: Request, res: Response) => {
     try {
       const currentUser = await storage.getUserByClerkId(req.auth.userId);
       if (!currentUser) {
         return res.status(401).json({ message: "Unauthorized" });
       }
       
-      let appointments: any[] = [];
+      let bookings: any[] = [];
       
       if (currentUser.role === "customer") {
-        appointments = await storage.listAppointmentsByCustomer(currentUser.id);
+        bookings = await storage.listBookingsByCustomer(currentUser.id);
       } else if (currentUser.role === "provider") {
-        appointments = await storage.listAppointmentsByProvider(currentUser.id);
+        bookings = await storage.listBookingsByProvider(currentUser.id);
       } else if (currentUser.role === "admin") {
-        appointments = await storage.listAppointments();
+        bookings = await storage.listBookings();
       }
       
-      return res.json(appointments);
+      return res.json(bookings);
     } catch (error) {
-      console.error("Error fetching appointments:", error);
-      return res.status(500).json({ message: "Error fetching appointments" });
+      console.error("Error fetching bookings:", error);
+      return res.status(500).json({ message: "Error fetching bookings" });
     }
   });
 
-  // Get all appointments (admin only)
-  app.get("/api/appointments", requireAuth, requireRole("admin"), async (_req: Request, res: Response) => {
+  // Get all bookings (admin only)
+  app.get("/api/bookings", requireAuth, requireRole("admin"), async (_req: Request, res: Response) => {
     try {
-      const appointments = await storage.listAppointments();
-      return res.json(appointments);
+      const bookings = await storage.listBookings();
+      return res.json(bookings);
     } catch (error) {
-      console.error("Error listing appointments:", error);
-      return res.status(500).json({ message: "Error listing appointments" });
+      console.error("Error listing bookings:", error);
+      return res.status(500).json({ message: "Error listing bookings" });
     }
   });
 
-  // Update appointment
-  app.patch("/api/appointments/:id", requireAuth, async (req: Request, res: Response) => {
+  // Update booking
+  app.patch("/api/bookings/:id", requireAuth, async (req: Request, res: Response) => {
     try {
       const id = parseInt(req.params.id);
       if (isNaN(id)) {
-        return res.status(400).json({ message: "Invalid appointment ID" });
+        return res.status(400).json({ message: "Invalid booking ID" });
       }
       
-      // Get appointment from database
-      const appointment = await storage.getAppointment(id);
-      if (!appointment) {
-        return res.status(404).json({ message: "Appointment not found" });
+      // Get booking from database
+      const booking = await storage.getBooking(id);
+      if (!booking) {
+        return res.status(404).json({ message: "Booking not found" });
       }
       
-      // Check if user has permission to update this appointment
+      // Check if user has permission to update this booking
       const currentUser = await storage.getUserByClerkId(req.auth.userId);
       if (!currentUser) {
         return res.status(401).json({ message: "Unauthorized" });
       }
       
-      // Only admin, the customer, or the provider can update the appointment
+      // Only admin, the customer, or the provider can update the booking
       if (
         currentUser.role !== "admin" && 
-        currentUser.id !== appointment.customerId && 
-        currentUser.id !== appointment.providerId
+        currentUser.id !== booking.customerId && 
+        currentUser.id !== booking.providerId
       ) {
         return res.status(403).json({ message: "Forbidden" });
       }
       
-      // Update appointment
-      const updatedAppointment = await storage.updateAppointment(id, req.body);
-      return res.json(updatedAppointment);
+      // Update booking
+      const updatedBooking = await storage.updateBooking(id, req.body);
+      return res.json(updatedBooking);
     } catch (error) {
-      console.error("Error updating appointment:", error);
-      return res.status(500).json({ message: "Error updating appointment" });
+      console.error("Error updating booking:", error);
+      return res.status(500).json({ message: "Error updating booking" });
     }
   });
 
-  // Delete appointment
-  app.delete("/api/appointments/:id", requireAuth, async (req: Request, res: Response) => {
+  // Delete booking
+  app.delete("/api/bookings/:id", requireAuth, async (req: Request, res: Response) => {
     try {
       const id = parseInt(req.params.id);
       if (isNaN(id)) {
-        return res.status(400).json({ message: "Invalid appointment ID" });
+        return res.status(400).json({ message: "Invalid booking ID" });
       }
       
-      // Get appointment from database
-      const appointment = await storage.getAppointment(id);
-      if (!appointment) {
-        return res.status(404).json({ message: "Appointment not found" });
+      // Get booking from database
+      const booking = await storage.getBooking(id);
+      if (!booking) {
+        return res.status(404).json({ message: "Booking not found" });
       }
       
-      // Check if user has permission to delete this appointment
+      // Check if user has permission to delete this booking
       const currentUser = await storage.getUserByClerkId(req.auth.userId);
       if (!currentUser) {
         return res.status(401).json({ message: "Unauthorized" });
       }
       
-      // Only admin, the customer, or the provider can delete the appointment
+      // Only admin, the customer, or the provider can delete the booking
       if (
         currentUser.role !== "admin" && 
-        currentUser.id !== appointment.customerId && 
-        currentUser.id !== appointment.providerId
+        currentUser.id !== booking.customerId && 
+        currentUser.id !== booking.providerId
       ) {
         return res.status(403).json({ message: "Forbidden" });
       }
       
-      // Delete appointment
-      const success = await storage.deleteAppointment(id);
+      // Delete booking
+      const success = await storage.deleteBooking(id);
       if (!success) {
-        return res.status(404).json({ message: "Appointment not found" });
+        return res.status(404).json({ message: "Booking not found" });
       }
       
       return res.status(204).send();
     } catch (error) {
-      console.error("Error deleting appointment:", error);
-      return res.status(500).json({ message: "Error deleting appointment" });
+      console.error("Error deleting booking:", error);
+      return res.status(500).json({ message: "Error deleting booking" });
     }
   });
 
