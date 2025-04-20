@@ -16,7 +16,8 @@ import {
   GraduationCap, 
   CalendarDays,
   ArrowRight,
-  Check
+  Check,
+  Star
 } from "lucide-react";
 
 export default function Home() {
