@@ -1,8 +1,12 @@
+
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { User, Users, Settings, Calendar, DollarSign, BarChart2, MessageSquare, CreditCard } from "lucide-react";
+import { 
+  User, Users, Settings, Calendar, DollarSign, BarChart2, 
+  MessageSquare, CreditCard, Tag, Bell, Globe, Percent, Shield 
+} from "lucide-react";
 import { User as UserType } from "@shared/schema";
 
 // Admin dashboard panels
@@ -14,13 +18,18 @@ import FinancialManagement from "./admin/financial-management";
 import AnalyticsReports from "./admin/analytics-reports";
 import SystemSettings from "./admin/system-settings";
 import DisputeResolution from "./admin/dispute-resolution";
+import Promotions from "./admin/promotions";
+import WithdrawalRequests from "./admin/withdrawal-requests";
+import PlatformSettings from "./admin/platform-settings";
+import LanguageSettings from "./admin/language-settings";
+import Notifications from "./admin/notifications";
 
 interface AdminDashboardProps {
   user: UserType | null;
 }
 
 export default function AdminDashboard({ user }: AdminDashboardProps) {
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("users");
 
   // Stats for overview cards
   const stats = {
@@ -31,7 +40,8 @@ export default function AdminDashboard({ user }: AdminDashboardProps) {
     completedBookings: 980,
     pendingDisputes: 8,
     thisMonthRevenue: 15430.75,
-    pendingWithdrawals: 4560.50
+    pendingWithdrawals: 4560.50,
+    activePromotions: 3
   };
 
   return (
@@ -88,16 +98,20 @@ export default function AdminDashboard({ user }: AdminDashboardProps) {
         </Card>
       </div>
 
-      <Tabs defaultValue="users" className="space-y-4">
-        <TabsList className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8">
+      <Tabs defaultValue="users" value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+        <TabsList className="grid grid-cols-3 lg:grid-cols-6 xl:grid-cols-6 2xl:grid-cols-12">
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="services">Services</TabsTrigger>
           <TabsTrigger value="bookings">Bookings</TabsTrigger>
           <TabsTrigger value="payments">Payments</TabsTrigger>
           <TabsTrigger value="financial">Financial</TabsTrigger>
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
+          <TabsTrigger value="promotions">Promotions</TabsTrigger>
+          <TabsTrigger value="withdrawals">Withdrawals</TabsTrigger>
           <TabsTrigger value="disputes">Disputes</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="platform">Platform</TabsTrigger>
+          <TabsTrigger value="language">Languages</TabsTrigger>
+          <TabsTrigger value="notifications">Notifications</TabsTrigger>
         </TabsList>
 
         <TabsContent value="users" className="space-y-4">
@@ -120,16 +134,32 @@ export default function AdminDashboard({ user }: AdminDashboardProps) {
           <FinancialManagement />
         </TabsContent>
 
-        <TabsContent value="analytics" className="space-y-4">
-          <AnalyticsReports />
+        <TabsContent value="promotions" className="space-y-4">
+          <Promotions />
         </TabsContent>
 
-        <TabsContent value="settings" className="space-y-4">
-          <SystemSettings />
+        <TabsContent value="withdrawals" className="space-y-4">
+          <WithdrawalRequests />
         </TabsContent>
 
         <TabsContent value="disputes" className="space-y-4">
           <DisputeResolution />
+        </TabsContent>
+
+        <TabsContent value="analytics" className="space-y-4">
+          <AnalyticsReports />
+        </TabsContent>
+
+        <TabsContent value="platform" className="space-y-4">
+          <PlatformSettings />
+        </TabsContent>
+
+        <TabsContent value="language" className="space-y-4">
+          <LanguageSettings />
+        </TabsContent>
+
+        <TabsContent value="notifications" className="space-y-4">
+          <Notifications />
         </TabsContent>
       </Tabs>
     </div>
