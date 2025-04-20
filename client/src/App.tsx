@@ -66,16 +66,22 @@ function Router() {
 }
 
 function App() {
+  // Show a simpler initialization for better debugging
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <div className="app-container">
+        <div className="app-container min-h-screen">
           <ClerkLoading>
-            <LoadingSpinner />
+            <div className="flex items-center justify-center min-h-screen">
+              <LoadingSpinner />
+              <span className="ml-2">Loading authentication...</span>
+            </div>
           </ClerkLoading>
+          
           <ClerkLoaded>
             <Router />
           </ClerkLoaded>
+          
           <Toaster />
         </div>
       </TooltipProvider>

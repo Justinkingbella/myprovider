@@ -4,29 +4,20 @@ import { ClerkProvider } from "@clerk/clerk-react";
 import App from "./App";
 import "./index.css";
 
-// Get the Clerk publishable key from environment variables
-const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || "";
+// Get the Clerk publishable key directly from the environment
+const publishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY as string;
 
-// Check if the key is missing
-if (!clerkPubKey) {
-  console.error("Missing Clerk publishable key. Please set VITE_CLERK_PUBLISHABLE_KEY environment variable.");
+// Output debug information
+if (!publishableKey) {
+  console.error("Missing VITE_CLERK_PUBLISHABLE_KEY");
+} else {
+  console.log("ClerkProvider initializing with key", publishableKey.substring(0, 8) + "...");
 }
 
-// Set up clerk options
-const clerkOptions = {
-  // Add appearance options if needed
-  appearance: {
-    baseTheme: undefined, // Use default theme
-  },
-};
-
-// Create the app
+// Create the app with minimal Clerk configuration
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ClerkProvider 
-      publishableKey={clerkPubKey} 
-      appearance={clerkOptions.appearance}
-    >
+    <ClerkProvider publishableKey={publishableKey}>
       <App />
     </ClerkProvider>
   </StrictMode>

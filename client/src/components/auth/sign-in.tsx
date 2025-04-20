@@ -28,16 +28,38 @@ export default function SignInForm() {
     setError(null);
     
     if (!isSignInLoaded) {
+      toast({
+        title: "Authentication loading",
+        description: "Please wait while the authentication system initializes.",
+      });
       return;
     }
     
     try {
       setIsLoading(true);
       
+      console.log("Starting sign in with email:", email);
+      
+      // Basic validation
+      if (!email || !email.includes('@')) {
+        setError("Please enter a valid email address");
+        setIsLoading(false);
+        return;
+      }
+      
+      if (!password || password.length < 8) {
+        setError("Password must be at least 8 characters");
+        setIsLoading(false);
+        return;
+      }
+      
+      // Attempt to sign in
       const result = await signIn.create({
         identifier: email,
         password,
       });
+      
+      console.log("Sign in result status:", result.status);
       
       if (result.status === "complete") {
         setEmail("");
@@ -51,12 +73,18 @@ export default function SignInForm() {
         setLocation("/dashboard");
       } else {
         // This shouldn't happen with identifier + password
-        console.error("Sign in not complete:", result);
+        console.log("Sign in not complete. Status:", result.status);
         setError("There was a problem signing in. Please try again.");
       }
     } catch (err: any) {
       console.error("Error during sign in:", err);
-      setError(err.errors?.[0]?.message || "Invalid email or password");
+      
+      // More detailed error handling
+      if (err.errors && err.errors.length > 0) {
+        setError(err.errors[0].message);
+      } else {
+        setError("Authentication failed. Please check your credentials and try again.");
+      }
     } finally {
       setIsLoading(false);
     }
