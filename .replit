@@ -10,7 +10,7 @@ deploymentTarget = "autoscale"
 run = ["sh", "-c", "npm run dev"]
 
 [workflows]
-runButton = "Start app"
+runButton = "Start App"
 
 [[workflows.workflow]]
 name = "Project"
@@ -39,6 +39,15 @@ waitForPort = 5000
 [[workflows.workflow]]
 name = "Start app"
 author = 41737398
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+
+[[workflows.workflow]]
+name = "Start App"
+author = 41746543
 mode = "sequential"
 
 [[workflows.workflow.tasks]]
