@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { User, Calendar, DollarSign, Settings, Star, MessageSquare, Users, Briefcase, CreditCard } from "lucide-react";
+import { User, Calendar, DollarSign, Settings, Star, MessageSquare, Users, Briefcase, CreditCard, Clock, MapPin } from "lucide-react";
 import { User as UserType } from "@shared/schema";
 
 // Provider dashboard panels
@@ -13,6 +13,8 @@ import EarningsPayout from "./provider/earnings-payout";
 import CustomerMessages from "./provider/customer-messages";
 import ReviewsRatings from "./provider/reviews-ratings";
 import SubscriptionPlans from "./provider/subscription-plans";
+import AvailabilitySettings from "./provider/availability-settings";
+import ServiceLocations from "./provider/service-locations";
 
 interface ProviderDashboardProps {
   user: UserType | null;
@@ -87,7 +89,7 @@ export default function ProviderDashboard({ user }: ProviderDashboardProps) {
         </Card>
       </div>
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid grid-cols-2 md:grid-cols-7 lg:grid-cols-7">
+        <TabsList className="grid grid-cols-2 md:grid-cols-8 lg:grid-cols-8">
           <TabsTrigger value="overview">
             <Users className="h-4 w-4 mr-2" />
             <span className="hidden md:inline">Overview</span>
@@ -103,6 +105,10 @@ export default function ProviderDashboard({ user }: ProviderDashboardProps) {
           <TabsTrigger value="bookings">
             <Calendar className="h-4 w-4 mr-2" />
             <span className="hidden md:inline">Bookings</span>
+          </TabsTrigger>
+          <TabsTrigger value="availability">
+            <Clock className="h-4 w-4 mr-2" />
+            <span className="hidden md:inline">Availability</span>
           </TabsTrigger>
           <TabsTrigger value="earnings">
             <DollarSign className="h-4 w-4 mr-2" />
@@ -259,7 +265,10 @@ export default function ProviderDashboard({ user }: ProviderDashboardProps) {
         </TabsContent>
         
         <TabsContent value="profile">
-          <ProviderProfile user={user} />
+          <div className="grid gap-6">
+            <ProviderProfile user={user} />
+            <ServiceLocations />
+          </div>
         </TabsContent>
         
         <TabsContent value="services">
@@ -284,6 +293,10 @@ export default function ProviderDashboard({ user }: ProviderDashboardProps) {
         
         <TabsContent value="subscription">
           <SubscriptionPlans />
+        </TabsContent>
+
+        <TabsContent value="availability">
+          <AvailabilitySettings />
         </TabsContent>
       </Tabs>
     </div>
