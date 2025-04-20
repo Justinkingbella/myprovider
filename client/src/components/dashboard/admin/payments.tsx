@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { 
   Card, 
@@ -164,13 +163,13 @@ export default function Payments() {
       payment.provider.toLowerCase().includes(search.toLowerCase()) ||
       payment.paymentId.toLowerCase().includes(search.toLowerCase()) ||
       payment.bookingId.toLowerCase().includes(search.toLowerCase());
-    
+
     if (selectedTab === "all") return matchesSearch;
     if (selectedTab === "pending") return matchesSearch && payment.status === "pending";
     if (selectedTab === "completed") return matchesSearch && payment.status === "completed";
     if (selectedTab === "failed") return matchesSearch && payment.status === "failed";
     if (selectedTab === "refunded") return matchesSearch && payment.status === "refunded";
-    
+
     return matchesSearch;
   });
 
@@ -296,7 +295,7 @@ export default function Payments() {
               View detailed information about this payment.
             </DialogDescription>
           </DialogHeader>
-          
+
           {selectedPayment && (
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -347,7 +346,7 @@ export default function Payments() {
               </div>
             </div>
           )}
-          
+
           <DialogFooter className="flex-col sm:flex-row gap-2">
             <Button variant="secondary" onClick={() => setOpenPaymentDialog(false)}>
               Close

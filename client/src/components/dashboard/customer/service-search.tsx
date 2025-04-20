@@ -40,7 +40,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar";
-import { Search, Filter, MapPin, Clock, Star, Heart, Calendar, ArrowRight, Home, Grid, List } from "lucide-react";
+import { Search, Filter, MapPin, Clock, Star, Heart, Calendar, ArrowRight, Home, Grid, List, Sparkles } from "lucide-react";
 import { 
   Table, 
   TableBody, 
