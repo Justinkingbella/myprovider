@@ -62,10 +62,14 @@ export default function SignUpForm() {
       
       // Create user with Clerk
       await signUp.create({
-        firstName,
-        lastName,
         emailAddress: email,
         password,
+      });
+      
+      // Set first and last name after creation
+      await signUp.update({
+        firstName,
+        lastName,
       });
       
       // Prepare verification
