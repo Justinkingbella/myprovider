@@ -1,4 +1,6 @@
 import { users, appointments, type User, type InsertUser, type Appointment, type InsertAppointment } from "@shared/schema";
+import { and, asc, desc, eq } from 'drizzle-orm';
+import { db } from './db';
 
 // Storage interface with User and Appointment management methods
 export interface IStorage {
@@ -23,150 +25,103 @@ export interface IStorage {
   listAppointmentsByProvider(providerId: number): Promise<Appointment[]>;
 }
 
-// In-memory storage implementation
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private appointments: Map<number, Appointment>;
-  private userIdCounter: number;
-  private appointmentIdCounter: number;
-
-  constructor() {
-    this.users = new Map();
-    this.appointments = new Map();
-    this.userIdCounter = 1;
-    this.appointmentIdCounter = 1;
-    
-    // Add admin user by default
-    this.createUser({
-      username: "admin",
-      email: "Antoniojoaquimjustino@gmail.com",
-      firstName: "Antonio",
-      lastName: "Joaquim",
-      clerkId: "admin_clerk_id",
-      role: "admin",
-    });
-  }
-
+// Database storage implementation
+export class DatabaseStorage implements IStorage {
   // User methods
   async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
+    const result = await db.select().from(users).where(eq(users.id, id));
+    return result[0];
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username.toLowerCase() === username.toLowerCase()
-    );
+    const result = await db.select().from(users).where(eq(users.username, username));
+    return result[0];
   }
 
   async getUserByEmail(email: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.email.toLowerCase() === email.toLowerCase()
-    );
+    const result = await db.select().from(users).where(eq(users.email, email));
+    return result[0];
   }
 
   async getUserByClerkId(clerkId: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.clerkId === clerkId
-    );
+    const result = await db.select().from(users).where(eq(users.clerkId, clerkId));
+    return result[0];
   }
 
   async createUser(userData: InsertUser): Promise<User> {
-    const id = this.userIdCounter++;
-    const now = new Date();
-    
-    const user: User = {
-      ...userData,
-      id,
-      createdAt: now,
-      updatedAt: now,
-    };
-    
-    this.users.set(id, user);
-    return user;
+    const result = await db.insert(users).values(userData).returning();
+    return result[0];
   }
 
   async updateUser(id: number, userData: Partial<User>): Promise<User | undefined> {
-    const existingUser = this.users.get(id);
-    if (!existingUser) return undefined;
-
-    const updatedUser: User = {
-      ...existingUser,
-      ...userData,
-      updatedAt: new Date(),
-    };
-    
-    this.users.set(id, updatedUser);
-    return updatedUser;
+    const now = new Date();
+    const result = await db
+      .update(users)
+      .set({ ...userData, updatedAt: now })
+      .where(eq(users.id, id))
+      .returning();
+    return result[0];
   }
 
   async deleteUser(id: number): Promise<boolean> {
-    return this.users.delete(id);
+    const result = await db.delete(users).where(eq(users.id, id));
+    return !!result;
   }
 
   async listUsers(): Promise<User[]> {
-    return Array.from(this.users.values());
+    return await db.select().from(users).orderBy(asc(users.id));
   }
 
   async listUsersByRole(role: string): Promise<User[]> {
-    return Array.from(this.users.values()).filter(
-      (user) => user.role === role
-    );
+    return await db.select().from(users).where(eq(users.role, role as any)).orderBy(asc(users.id));
   }
 
   // Appointment methods
   async getAppointment(id: number): Promise<Appointment | undefined> {
-    return this.appointments.get(id);
+    const result = await db.select().from(appointments).where(eq(appointments.id, id));
+    return result[0];
   }
 
   async createAppointment(appointmentData: InsertAppointment): Promise<Appointment> {
-    const id = this.appointmentIdCounter++;
-    const now = new Date();
-    
-    const appointment: Appointment = {
-      ...appointmentData,
-      id,
-      createdAt: now,
-      updatedAt: now,
-    };
-    
-    this.appointments.set(id, appointment);
-    return appointment;
+    const result = await db.insert(appointments).values(appointmentData).returning();
+    return result[0];
   }
 
   async updateAppointment(id: number, appointmentData: Partial<Appointment>): Promise<Appointment | undefined> {
-    const existingAppointment = this.appointments.get(id);
-    if (!existingAppointment) return undefined;
-
-    const updatedAppointment: Appointment = {
-      ...existingAppointment,
-      ...appointmentData,
-      updatedAt: new Date(),
-    };
-    
-    this.appointments.set(id, updatedAppointment);
-    return updatedAppointment;
+    const now = new Date();
+    const result = await db
+      .update(appointments)
+      .set({ ...appointmentData, updatedAt: now })
+      .where(eq(appointments.id, id))
+      .returning();
+    return result[0];
   }
 
   async deleteAppointment(id: number): Promise<boolean> {
-    return this.appointments.delete(id);
+    const result = await db.delete(appointments).where(eq(appointments.id, id));
+    return !!result;
   }
 
   async listAppointments(): Promise<Appointment[]> {
-    return Array.from(this.appointments.values());
+    return await db.select().from(appointments).orderBy(desc(appointments.dateTime));
   }
 
   async listAppointmentsByCustomer(customerId: number): Promise<Appointment[]> {
-    return Array.from(this.appointments.values()).filter(
-      (appointment) => appointment.customerId === customerId
-    );
+    return await db
+      .select()
+      .from(appointments)
+      .where(eq(appointments.customerId, customerId))
+      .orderBy(desc(appointments.dateTime));
   }
 
   async listAppointmentsByProvider(providerId: number): Promise<Appointment[]> {
-    return Array.from(this.appointments.values()).filter(
-      (appointment) => appointment.providerId === providerId
-    );
+    return await db
+      .select()
+      .from(appointments)
+      .where(eq(appointments.providerId, providerId))
+      .orderBy(desc(appointments.dateTime));
   }
 }
 
 // Export instance for use in routes
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();

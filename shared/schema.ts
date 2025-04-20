@@ -1,6 +1,7 @@
 import { pgTable, text, serial, integer, timestamp, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+import { relations } from "drizzle-orm";
 
 // User table
 export const users = pgTable("users", {
@@ -62,3 +63,22 @@ export type InsertUser = z.infer<typeof insertUserSchema>;
 export type Appointment = typeof appointments.$inferSelect;
 export type InsertAppointment = z.infer<typeof insertAppointmentSchema>;
 export type UserRegistration = z.infer<typeof userRegistrationSchema>;
+
+// Define relations between tables
+export const usersRelations = relations(users, ({ many }) => ({
+  customerAppointments: many(appointments, { relationName: "customerAppointments" }),
+  providerAppointments: many(appointments, { relationName: "providerAppointments" }),
+}));
+
+export const appointmentsRelations = relations(appointments, ({ one }) => ({
+  customer: one(users, {
+    fields: [appointments.customerId],
+    references: [users.id],
+    relationName: "customerAppointments",
+  }),
+  provider: one(users, {
+    fields: [appointments.providerId],
+    references: [users.id],
+    relationName: "providerAppointments",
+  }),
+}));
