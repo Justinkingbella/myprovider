@@ -248,8 +248,8 @@ export const userRegistrationSchema = z.object({
   password: z
     .string()
     .min(8, "Password must be at least 8 characters")
-    .regex(/[0-9]/, "Password must contain at least one number"),
-    // Special character requirement removed temporarily for testing
+    .regex(/[0-9]/, "Password must contain at least one number")
+    .regex(/[!@#$%^&*(),.?":{}|<>]/, "Password must contain at least one special character"),
   role: z.enum(["provider", "customer"]).default("customer"),
 });
 
