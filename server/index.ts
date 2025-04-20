@@ -42,12 +42,10 @@ app.use((req, res, next) => {
 (async () => {
   // Initialize database 
   try {
-    log("Pushing database schema...");
-    // We'll use the direct approach since we're not using migrations
-    // in a real production app, you might want to use migrate() with proper migrations
-    
-    // Create database tables from our schema
-    // await migrate(db, { migrationsFolder: './drizzle' });
+    log("Running database migrations...");
+    // Import and run migrations
+    const { applyMigrations } = await import('./migrations');
+    await applyMigrations();
     
     // Set up admin user
     await setupAdminUser();
