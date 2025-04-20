@@ -14,7 +14,9 @@ import {
   Car, 
   Scissors, 
   GraduationCap, 
-  CalendarDays 
+  CalendarDays,
+  ArrowRight,
+  Check
 } from "lucide-react";
 
 export default function Home() {
@@ -23,9 +25,10 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header/Hero Section with Yellow Background */}
-      <header className="bg-yellow-400 py-12 px-4 md:px-6 lg:px-8">
-        <div className="container mx-auto">
-          <nav className="flex justify-between items-center mb-12">
+      <header className="bg-yellow-400 py-12 md:py-20 px-4 md:px-6 lg:px-8 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/patterns/dots.svg')] opacity-10"></div>
+        <div className="container mx-auto relative z-10">
+          <nav className="flex justify-between items-center mb-16">
             <div className="flex items-center gap-2">
               <div className="bg-black text-white text-xs font-bold py-1 px-2 rounded">NSH</div>
               <span className="font-semibold">Namibian Service</span>
@@ -59,166 +62,138 @@ export default function Home() {
             </div>
           </nav>
 
-          <div className="text-center max-w-3xl mx-auto transform transition-all animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-gray-900">
-              Namibia's Premier Service Marketplace
-            </h1>
-            <p className="text-lg mb-8 text-gray-800 max-w-2xl mx-auto">
-              Connect with trusted service providers or offer your skills to customers 
-              across Namibia
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                className="bg-black text-white hover:bg-gray-800 text-lg px-8 py-6 h-auto"
-                onClick={() => setLocation("/sign-up")}
-              >
-                Get Started
-              </Button>
-              <Button 
-                variant="outline" 
-                className="bg-white hover:bg-gray-100 text-lg px-8 py-6 h-auto"
-                onClick={() => setLocation("/service-browse")}
-              >
-                Browse Services
-              </Button>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-12">
+            <div className="max-w-xl animate-in fade-in slide-in-from-left-4 duration-700">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 leading-tight">
+                Find Local Services <span className="text-gray-800">You Can Trust</span>
+              </h1>
+              <p className="text-lg mb-8 text-gray-800">
+                Namibia's premier marketplace connecting you with trusted local service providers.
+                Get help with anything from home cleaning to professional services.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button 
+                  className="bg-black text-white hover:bg-gray-800 text-lg px-8 py-6 h-auto group"
+                  onClick={() => setLocation("/sign-up")}
+                >
+                  Get Started <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  className="bg-white hover:bg-gray-100 text-lg px-8 py-6 h-auto"
+                  onClick={() => setLocation("/services")}
+                >
+                  Browse Services
+                </Button>
+              </div>
+            </div>
+            
+            <div className="w-full max-w-md animate-in fade-in slide-in-from-right-4 duration-700">
+              <div className="bg-white p-6 rounded-xl shadow-lg border border-yellow-200">
+                <h3 className="text-xl font-semibold mb-4">What do you need help with?</h3>
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  <Button variant="outline" className="justify-start">
+                    <Brush className="mr-2 h-4 w-4" />
+                    <span>Cleaning</span>
+                  </Button>
+                  <Button variant="outline" className="justify-start">
+                    <Wrench className="mr-2 h-4 w-4" />
+                    <span>Repairs</span>
+                  </Button>
+                  <Button variant="outline" className="justify-start">
+                    <Car className="mr-2 h-4 w-4" />
+                    <span>Auto Services</span>
+                  </Button>
+                  <Button variant="outline" className="justify-start">
+                    <GraduationCap className="mr-2 h-4 w-4" />
+                    <span>Tutoring</span>
+                  </Button>
+                </div>
+                <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-white">
+                  Find A Service
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Why Choose Us Section */}
+      {/* Stats Section */}
+      <section className="bg-white py-8 border-b">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap justify-center md:justify-between items-center gap-8 text-center md:text-left">
+            <div className="flex items-center gap-2">
+              <span className="text-3xl font-bold text-yellow-500">500+</span>
+              <span className="text-gray-600">Service Providers</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-3xl font-bold text-yellow-500">12k+</span>
+              <span className="text-gray-600">Completed Jobs</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-3xl font-bold text-yellow-500">4.8</span>
+              <span className="text-gray-600">Satisfaction Rating</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-3xl font-bold text-yellow-500">14</span>
+              <span className="text-gray-600">Regions Covered</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
       <section className="py-16 px-4 bg-gray-50">
         <div className="container mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">
-            Why Choose Namibian Service Hub?
-          </h2>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">How It Works</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Getting the help you need has never been easier. Follow these simple steps to connect with trusted service providers.
+            </p>
+          </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Card 1 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow">
-              <div className="flex flex-col items-center text-center">
-                <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
-                  <Shield className="h-6 w-6 text-yellow-600" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Verified Professionals</h3>
-                <p className="text-gray-600 mb-4">
-                  Every service provider on our platform undergoes a thorough verification process, ensuring you receive quality service.
-                </p>
-                <ul className="space-y-2 text-left w-full">
-                  <li className="flex items-start">
-                    <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-gray-600">Background checks</span>
-                  </li>
-                  <li className="flex items-start">
-                    <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-gray-600">ID verification</span>
-                  </li>
-                  <li className="flex items-start">
-                    <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-gray-600">Customer reviews</span>
-                  </li>
-                  <li className="flex items-start">
-                    <svg className="h-5 w-5 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-gray-600">Quality monitoring</span>
-                  </li>
-                </ul>
-                <Button variant="outline" className="mt-4 bg-yellow-50 text-yellow-600 hover:bg-yellow-100 border-yellow-200">
-                  Learn About Our Process
-                </Button>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Step 1 */}
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 flex flex-col items-center text-center">
+              <div className="bg-yellow-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 text-yellow-600 font-bold text-xl">
+                1
               </div>
+              <h3 className="text-xl font-semibold mb-2">Describe Your Needs</h3>
+              <p className="text-gray-600">
+                Tell us what service you're looking for and provide details about your specific requirements.
+              </p>
             </div>
             
-            {/* Card 2 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow">
-              <div className="flex flex-col items-center text-center">
-                <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mb-4">
-                  <Clock className="h-6 w-6 text-orange-600" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Book Instantly</h3>
-                <p className="text-gray-600 mb-4">
-                  Schedule services at your convenience with our real-time booking system. Receive immediate confirmation.
-                </p>
-                <div className="mt-auto pt-6">
-                  <Button variant="ghost" className="text-orange-600 hover:text-orange-700 hover:bg-orange-50">
-                    Book a Service Now
-                  </Button>
-                </div>
+            {/* Step 2 */}
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 flex flex-col items-center text-center">
+              <div className="bg-yellow-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 text-yellow-600 font-bold text-xl">
+                2
               </div>
+              <h3 className="text-xl font-semibold mb-2">Match With Providers</h3>
+              <p className="text-gray-600">
+                Browse profiles of qualified service providers in your area and compare ratings and reviews.
+              </p>
             </div>
             
-            {/* Card 3 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow">
-              <div className="flex flex-col items-center text-center">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                  <Shield className="h-6 w-6 text-green-600" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Secure Payments</h3>
-                <p className="text-gray-600 mb-4">
-                  Your transactions are protected with our secure payment system supporting multiple payment methods.
-                </p>
-                <div className="mt-auto pt-6">
-                  <Button variant="ghost" className="text-green-600 hover:text-green-700 hover:bg-green-50">
-                    Learn About Security
-                  </Button>
-                </div>
+            {/* Step 3 */}
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 flex flex-col items-center text-center">
+              <div className="bg-yellow-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 text-yellow-600 font-bold text-xl">
+                3
               </div>
+              <h3 className="text-xl font-semibold mb-2">Book & Pay Securely</h3>
+              <p className="text-gray-600">
+                Schedule the service at your convenience and pay securely through our platform.
+              </p>
             </div>
-            
-            {/* Card 4 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow">
-              <div className="flex flex-col items-center text-center">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                  <MapPin className="h-6 w-6 text-blue-600" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Local Services</h3>
-                <p className="text-gray-600 mb-4">
-                  Find service providers in your area across all regions of Namibia, supporting local businesses.
-                </p>
-                <div className="mt-auto pt-6">
-                  <Button variant="ghost" className="text-blue-600 hover:text-blue-700 hover:bg-blue-50">
-                    Find Local Services
-                  </Button>
-                </div>
-              </div>
-            </div>
-            
-            {/* Card 5 */}
-            <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow">
-              <div className="flex flex-col items-center text-center">
-                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
-                  <CreditCard className="h-6 w-6 text-purple-600" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Multiple Payment Options</h3>
-                <p className="text-gray-600 mb-4">
-                  We support various payment methods to make transactions convenient and accessible.
-                </p>
-                <div className="grid grid-cols-2 gap-2 w-full mt-2">
-                  <div className="border rounded p-2 flex items-center justify-center text-sm">
-                    <span>Credit/Debit</span>
-                  </div>
-                  <div className="border rounded p-2 flex items-center justify-center text-sm">
-                    <span>Bank Transfer</span>
-                  </div>
-                  <div className="border rounded p-2 flex items-center justify-center text-sm">
-                    <span>Mobile Money</span>
-                  </div>
-                  <div className="border rounded p-2 flex items-center justify-center text-sm">
-                    <span>Cash on Delivery</span>
-                  </div>
-                </div>
-                <Button variant="outline" className="mt-4 bg-purple-50 text-purple-600 hover:bg-purple-100 border-purple-200">
-                  View Payment Options
-                </Button>
-              </div>
-            </div>
+          </div>
+          
+          <div className="text-center mt-10">
+            <Button 
+              onClick={() => setLocation("/how-it-works")}
+              className="bg-black text-white hover:bg-gray-800"
+            >
+              Learn More
+            </Button>
           </div>
         </div>
       </section>
@@ -226,88 +201,240 @@ export default function Home() {
       {/* Popular Services Section */}
       <section className="py-16 px-4 bg-white">
         <div className="container mx-auto">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-12">
-            Popular Services
-          </h2>
+          <div className="flex justify-between items-end mb-10">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold mb-2">
+                Popular Services
+              </h2>
+              <p className="text-gray-600">
+                Find the most in-demand services across Namibia
+              </p>
+            </div>
+            <Button 
+              variant="outline" 
+              className="border-gray-300"
+              onClick={() => setLocation("/services")}
+            >
+              View All Services
+            </Button>
+          </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {/* Service 1 */}
-            <div className="bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-all p-4 text-center transform hover:-translate-y-1">
-              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Brush className="h-6 w-6 text-red-600" />
+            <div className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-6 text-center border border-gray-100 hover:border-yellow-300">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-red-200 transition-colors">
+                <Brush className="h-8 w-8 text-red-600" />
               </div>
-              <h3 className="font-semibold mb-1">Home Cleaning</h3>
-              <p className="text-sm text-gray-500">142 providers</p>
+              <h3 className="font-semibold text-lg mb-1">Home Cleaning</h3>
+              <p className="text-sm text-gray-500 mb-3">142 providers</p>
+              <Button variant="link" className="text-red-600" onClick={() => setLocation("/services/home-cleaning")}>
+                View Providers
+              </Button>
             </div>
             
             {/* Service 2 */}
-            <div className="bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-all p-4 text-center transform hover:-translate-y-1">
-              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Wrench className="h-6 w-6 text-blue-600" />
+            <div className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-6 text-center border border-gray-100 hover:border-yellow-300">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 transition-colors">
+                <Wrench className="h-8 w-8 text-blue-600" />
               </div>
-              <h3 className="font-semibold mb-1">Plumbing</h3>
-              <p className="text-sm text-gray-500">78 providers</p>
+              <h3 className="font-semibold text-lg mb-1">Plumbing</h3>
+              <p className="text-sm text-gray-500 mb-3">78 providers</p>
+              <Button variant="link" className="text-blue-600" onClick={() => setLocation("/services/plumbing")}>
+                View Providers
+              </Button>
             </div>
             
             {/* Service 3 */}
-            <div className="bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-all p-4 text-center transform hover:-translate-y-1">
-              <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Zap className="h-6 w-6 text-yellow-600" />
+            <div className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-6 text-center border border-gray-100 hover:border-yellow-300">
+              <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-yellow-200 transition-colors">
+                <Zap className="h-8 w-8 text-yellow-600" />
               </div>
-              <h3 className="font-semibold mb-1">Electrical Work</h3>
-              <p className="text-sm text-gray-500">95 providers</p>
+              <h3 className="font-semibold text-lg mb-1">Electrical Work</h3>
+              <p className="text-sm text-gray-500 mb-3">95 providers</p>
+              <Button variant="link" className="text-yellow-600" onClick={() => setLocation("/services/electrical")}>
+                View Providers
+              </Button>
             </div>
             
             {/* Service 4 */}
-            <div className="bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-all p-4 text-center transform hover:-translate-y-1">
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Flower2 className="h-6 w-6 text-green-600" />
+            <div className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-6 text-center border border-gray-100 hover:border-yellow-300">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-green-200 transition-colors">
+                <Flower2 className="h-8 w-8 text-green-600" />
               </div>
-              <h3 className="font-semibold mb-1">Gardening</h3>
-              <p className="text-sm text-gray-500">63 providers</p>
-            </div>
-            
-            {/* Service 5 */}
-            <div className="bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-all p-4 text-center transform hover:-translate-y-1">
-              <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Car className="h-6 w-6 text-gray-600" />
-              </div>
-              <h3 className="font-semibold mb-1">Car Repairs</h3>
-              <p className="text-sm text-gray-500">86 providers</p>
-            </div>
-            
-            {/* Service 6 */}
-            <div className="bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-all p-4 text-center transform hover:-translate-y-1">
-              <div className="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <Scissors className="h-6 w-6 text-pink-600" />
-              </div>
-              <h3 className="font-semibold mb-1">Beauty & Spa</h3>
-              <p className="text-sm text-gray-500">127 providers</p>
-            </div>
-            
-            {/* Service 7 */}
-            <div className="bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-all p-4 text-center transform hover:-translate-y-1">
-              <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <GraduationCap className="h-6 w-6 text-indigo-600" />
-              </div>
-              <h3 className="font-semibold mb-1">Home Tutoring</h3>
-              <p className="text-sm text-gray-500">91 providers</p>
-            </div>
-            
-            {/* Service 8 */}
-            <div className="bg-white rounded-lg border border-gray-200 hover:shadow-lg transition-all p-4 text-center transform hover:-translate-y-1">
-              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                <CalendarDays className="h-6 w-6 text-purple-600" />
-              </div>
-              <h3 className="font-semibold mb-1">Event Planning</h3>
-              <p className="text-sm text-gray-500">74 providers</p>
+              <h3 className="font-semibold text-lg mb-1">Gardening</h3>
+              <p className="text-sm text-gray-500 mb-3">63 providers</p>
+              <Button variant="link" className="text-green-600" onClick={() => setLocation("/services/gardening")}>
+                View Providers
+              </Button>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Why Choose Us Section */}
+      <section className="py-16 px-4 bg-gray-50">
+        <div className="container mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Why Choose Namibian Service Hub?
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              We're committed to connecting Namibians with reliable, high-quality service providers.
+            </p>
+          </div>
           
-          <div className="text-center mt-12">
-            <Button variant="outline" className="border-gray-300">
-              View All Services
-            </Button>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Feature 1 */}
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+              <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mb-4">
+                <Shield className="h-6 w-6 text-yellow-600" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">Verified Professionals</h3>
+              <p className="text-gray-600 mb-4">
+                Every provider undergoes thorough verification to ensure quality and reliability.
+              </p>
+              <ul className="space-y-2">
+                <li className="flex items-start">
+                  <Check className="h-5 w-5 text-green-500 mr-2 shrink-0" />
+                  <span className="text-gray-600">Background checks</span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="h-5 w-5 text-green-500 mr-2 shrink-0" />
+                  <span className="text-gray-600">ID verification</span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="h-5 w-5 text-green-500 mr-2 shrink-0" />
+                  <span className="text-gray-600">Customer reviews</span>
+                </li>
+              </ul>
+            </div>
+            
+            {/* Feature 2 */}
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+              <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mb-4">
+                <Clock className="h-6 w-6 text-orange-600" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">Instant Booking</h3>
+              <p className="text-gray-600 mb-4">
+                Our real-time booking system lets you schedule services when you need them.
+              </p>
+              <ul className="space-y-2">
+                <li className="flex items-start">
+                  <Check className="h-5 w-5 text-green-500 mr-2 shrink-0" />
+                  <span className="text-gray-600">24/7 availability</span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="h-5 w-5 text-green-500 mr-2 shrink-0" />
+                  <span className="text-gray-600">Immediate confirmation</span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="h-5 w-5 text-green-500 mr-2 shrink-0" />
+                  <span className="text-gray-600">Flexible scheduling</span>
+                </li>
+              </ul>
+            </div>
+            
+            {/* Feature 3 */}
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+              <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
+                <CreditCard className="h-6 w-6 text-purple-600" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">Secure Payments</h3>
+              <p className="text-gray-600 mb-4">
+                Multiple payment options with top-level security for all transactions.
+              </p>
+              <ul className="space-y-2">
+                <li className="flex items-start">
+                  <Check className="h-5 w-5 text-green-500 mr-2 shrink-0" />
+                  <span className="text-gray-600">Credit/Debit cards</span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="h-5 w-5 text-green-500 mr-2 shrink-0" />
+                  <span className="text-gray-600">Bank transfers</span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="h-5 w-5 text-green-500 mr-2 shrink-0" />
+                  <span className="text-gray-600">Mobile money</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-16 px-4 bg-white">
+        <div className="container mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">What Our Users Say</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Hear from customers and service providers who use our platform
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Testimonial 1 */}
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
+                <div>
+                  <h4 className="font-semibold">Maria Nangolo</h4>
+                  <p className="text-sm text-gray-500">Windhoek</p>
+                </div>
+              </div>
+              <div className="flex text-yellow-400 mb-3">
+                <Star className="h-5 w-5 fill-current" />
+                <Star className="h-5 w-5 fill-current" />
+                <Star className="h-5 w-5 fill-current" />
+                <Star className="h-5 w-5 fill-current" />
+                <Star className="h-5 w-5 fill-current" />
+              </div>
+              <p className="text-gray-600">
+                "I found an excellent plumber within minutes. The booking was easy and the service was professional. Highly recommend!"
+              </p>
+            </div>
+            
+            {/* Testimonial 2 */}
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
+                <div>
+                  <h4 className="font-semibold">John Amukwaya</h4>
+                  <p className="text-sm text-gray-500">Swakopmund</p>
+                </div>
+              </div>
+              <div className="flex text-yellow-400 mb-3">
+                <Star className="h-5 w-5 fill-current" />
+                <Star className="h-5 w-5 fill-current" />
+                <Star className="h-5 w-5 fill-current" />
+                <Star className="h-5 w-5 fill-current" />
+                <Star className="h-5 w-5" />
+              </div>
+              <p className="text-gray-600">
+                "As a service provider, this platform has helped me grow my business. I get consistent bookings and the payment system is reliable."
+              </p>
+            </div>
+            
+            {/* Testimonial 3 */}
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
+                <div>
+                  <h4 className="font-semibold">Sarah Tjombe</h4>
+                  <p className="text-sm text-gray-500">Walvis Bay</p>
+                </div>
+              </div>
+              <div className="flex text-yellow-400 mb-3">
+                <Star className="h-5 w-5 fill-current" />
+                <Star className="h-5 w-5 fill-current" />
+                <Star className="h-5 w-5 fill-current" />
+                <Star className="h-5 w-5 fill-current" />
+                <Star className="h-5 w-5 fill-current" />
+              </div>
+              <p className="text-gray-600">
+                "The gardening service I booked was exceptional. The platform made it easy to find exactly what I needed at a fair price."
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -315,22 +442,23 @@ export default function Home() {
       {/* CTA Section */}
       <section className="py-16 px-4 bg-orange-500 text-white">
         <div className="container mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Ready to Get Started?
           </h2>
-          <p className="text-lg mb-8 max-w-2xl mx-auto">
+          <p className="text-xl mb-8 max-w-2xl mx-auto">
             Join thousands of Namibians who are already using our platform to find services or grow their business.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
-              className="bg-black text-white hover:bg-gray-800"
+              className="bg-black text-white hover:bg-gray-800 px-8 py-3 text-lg"
               onClick={() => setLocation("/sign-up")}
             >
               Create an Account
             </Button>
             <Button 
               variant="outline" 
-              className="bg-transparent text-white border-white hover:bg-white/10"
+              className="bg-transparent text-white border-white hover:bg-white/10 px-8 py-3 text-lg"
+              onClick={() => setLocation("/about")}
             >
               Learn More
             </Button>
@@ -372,43 +500,40 @@ export default function Home() {
             <div>
               <h3 className="font-bold text-gray-900 mb-4">Quick Links</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="text-gray-600 hover:text-gray-900">Home</a></li>
-                <li><a href="#" className="text-gray-600 hover:text-gray-900">How It Works</a></li>
-                <li><a href="#" className="text-gray-600 hover:text-gray-900">Service Providers</a></li>
-                <li><a href="#" className="text-gray-600 hover:text-gray-900">About Us</a></li>
-                <li><a href="#" className="text-gray-600 hover:text-gray-900">Contact</a></li>
+                <li><a href="/" className="text-gray-600 hover:text-gray-900">Home</a></li>
+                <li><a href="/services" className="text-gray-600 hover:text-gray-900">Services</a></li>
+                <li><a href="/how-it-works" className="text-gray-600 hover:text-gray-900">How It Works</a></li>
+                <li><a href="/about" className="text-gray-600 hover:text-gray-900">About Us</a></li>
+                <li><a href="/contact" className="text-gray-600 hover:text-gray-900">Contact</a></li>
               </ul>
             </div>
             
             <div>
               <h3 className="font-bold text-gray-900 mb-4">Categories</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="text-gray-600 hover:text-gray-900">Home Services</a></li>
-                <li><a href="#" className="text-gray-600 hover:text-gray-900">Professional Services</a></li>
-                <li><a href="#" className="text-gray-600 hover:text-gray-900">Health & Wellness</a></li>
-                <li><a href="#" className="text-gray-600 hover:text-gray-900">Education & Tutoring</a></li>
-                <li><a href="#" className="text-gray-600 hover:text-gray-900">Events & Entertainment</a></li>
+                <li><a href="/services" className="text-gray-600 hover:text-gray-900">Home Services</a></li>
+                <li><a href="/services" className="text-gray-600 hover:text-gray-900">Professional Services</a></li>
+                <li><a href="/services" className="text-gray-600 hover:text-gray-900">Health & Wellness</a></li>
+                <li><a href="/services" className="text-gray-600 hover:text-gray-900">Education & Tutoring</a></li>
+                <li><a href="/services" className="text-gray-600 hover:text-gray-900">Events & Entertainment</a></li>
               </ul>
             </div>
             
             <div>
               <h3 className="font-bold text-gray-900 mb-4">Contact Us</h3>
-              <ul className="space-y-2 text-gray-600">
+              <ul className="space-y-3 text-gray-600">
                 <li className="flex items-start">
-                  <svg className="h-6 w-6 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
+                  <MapPin className="h-5 w-5 text-gray-400 mr-2 shrink-0 mt-0.5" />
                   <span>123 Independence Avenue, Windhoek, Namibia</span>
                 </li>
                 <li className="flex items-start">
-                  <svg className="h-6 w-6 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-5 w-5 text-gray-400 mr-2 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                   <span>+264 61 123 456</span>
                 </li>
                 <li className="flex items-start">
-                  <svg className="h-6 w-6 text-gray-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-5 w-5 text-gray-400 mr-2 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                   <span>info@namibianservicehub.com</span>

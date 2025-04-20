@@ -19,6 +19,10 @@ import Home from "@/pages/home";
 import SignIn from "@/pages/sign-in";
 import SignUp from "@/pages/sign-up";
 import Dashboard from "@/pages/dashboard";
+import Services from "@/pages/services";
+import HowItWorks from "@/pages/how-it-works";
+import About from "@/pages/about";
+import Contact from "@/pages/contact";
 import NotFound from "@/pages/not-found";
 
 // Loading spinner component
@@ -52,6 +56,10 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/sign-in" component={SignIn} />
       <Route path="/sign-up" component={SignUp} />
+      <Route path="/services" component={Services} />
+      <Route path="/how-it-works" component={HowItWorks} />
+      <Route path="/about" component={About} />
+      <Route path="/contact" component={Contact} />
       <Route path="/dashboard">
         {() => (
           <ProtectedRoute>
