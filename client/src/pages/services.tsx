@@ -1,305 +1,294 @@
 
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useLocation } from "wouter";
-import Navbar from "@/components/navigation/navbar";
-import Footer from "@/components/navigation/footer";
-import {
+import { 
   Search, 
-  MapPin, 
-  Brush, 
-  Wrench, 
-  Zap, 
-  Flower2, 
-  Car, 
-  Scissors, 
-  GraduationCap, 
-  CalendarDays,
-  HomeIcon,
-  Briefcase,
-  Heart,
-  Music,
-  ShoppingBag,
-  Palette,
-  Shirt,
-  ChefHat
+  Briefcase, 
+  Home as HomeIcon, 
+  User, 
+  Truck,
+  Heart, 
+  HelpCircle,
+  Filter,
+  Sliders,
+  Star,
+  MapPin
 } from "lucide-react";
 
+import Navbar from "@/components/navigation/navbar";
+import Footer from "@/components/navigation/footer";
+
+// Mock service data
+const SERVICES = [
+  {
+    id: 1,
+    name: "Home Cleaning",
+    category: "general",
+    description: "Professional home cleaning services for any size residence",
+    price: "N$250/hr",
+    rating: 4.8,
+    location: "Windhoek",
+    provider: "CleanPro Services",
+    image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&q=80"
+  },
+  {
+    id: 2,
+    name: "Plumbing Repair",
+    category: "home",
+    description: "Expert plumbing services for leaks, installations, and repairs",
+    price: "N$350/hr",
+    rating: 4.6,
+    location: "Swakopmund",
+    provider: "FixRight Plumbing",
+    image: "https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&q=80"
+  },
+  {
+    id: 3,
+    name: "Legal Consultation",
+    category: "professional",
+    description: "Professional legal advice on various matters",
+    price: "N$600/hr",
+    rating: 4.9,
+    location: "Windhoek",
+    provider: "Legal Solutions",
+    image: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80"
+  },
+  {
+    id: 4,
+    name: "Moving Services",
+    category: "transportation",
+    description: "Reliable moving services for homes and offices",
+    price: "N$1200/day",
+    rating: 4.7,
+    location: "Nationwide",
+    provider: "Swift Movers",
+    image: "https://images.unsplash.com/photo-1600518464441-a34d5dec4452?auto=format&fit=crop&q=80"
+  },
+  {
+    id: 5,
+    name: "Massage Therapy",
+    category: "health",
+    description: "Professional massage therapy for relaxation and wellness",
+    price: "N$450/session",
+    rating: 4.9,
+    location: "Windhoek",
+    provider: "Wellness Spa",
+    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&q=80"
+  },
+  {
+    id: 6,
+    name: "Graphic Design",
+    category: "freelance",
+    description: "Creative graphic design services for businesses",
+    price: "N$400/hr",
+    rating: 4.8,
+    location: "Remote",
+    provider: "Creative Designs",
+    image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80"
+  }
+];
+
 export default function Services() {
-  const [, setLocation] = useLocation();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [location, setLocationFilter] = useState("");
-  const [category, setCategory] = useState("all");
+  const [location, setLocation] = useLocation();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(
+    location.includes("?category=") ? location.split("?category=")[1] : ""
+  );
 
-  // Example service categories
-  const categories = [
-    { id: "home", name: "Home Services", icon: HomeIcon, color: "bg-red-100 text-red-600" },
-    { id: "professional", name: "Professional Services", icon: Briefcase, color: "bg-blue-100 text-blue-600" },
-    { id: "health", name: "Health & Wellness", icon: Heart, color: "bg-green-100 text-green-600" },
-    { id: "education", name: "Education & Tutoring", icon: GraduationCap, color: "bg-purple-100 text-purple-600" },
-    { id: "events", name: "Events & Entertainment", icon: Music, color: "bg-orange-100 text-orange-600" },
-    { id: "shopping", name: "Shopping & Delivery", icon: ShoppingBag, color: "bg-indigo-100 text-indigo-600" },
-    { id: "arts", name: "Arts & Crafts", icon: Palette, color: "bg-pink-100 text-pink-600" },
-    { id: "fashion", name: "Fashion & Apparel", icon: Shirt, color: "bg-cyan-100 text-cyan-600" },
-    { id: "food", name: "Food & Catering", icon: ChefHat, color: "bg-amber-100 text-amber-600" },
-  ];
-
-  // Example services
-  const services = [
-    { 
-      id: 1, 
-      name: "Home Cleaning", 
-      category: "home", 
-      providers: 142, 
-      icon: Brush, 
-      color: "bg-red-100 text-red-600",
-      description: "Professional home cleaning services for all your needs"
-    },
-    { 
-      id: 2, 
-      name: "Plumbing Repairs", 
-      category: "home", 
-      providers: 78, 
-      icon: Wrench, 
-      color: "bg-blue-100 text-blue-600",
-      description: "Quick and reliable plumbing repair services"
-    },
-    { 
-      id: 3, 
-      name: "Electrical Work", 
-      category: "home", 
-      providers: 95, 
-      icon: Zap, 
-      color: "bg-yellow-100 text-yellow-600",
-      description: "Certified electricians for all electrical services"
-    },
-    { 
-      id: 4, 
-      name: "Gardening", 
-      category: "home", 
-      providers: 63, 
-      icon: Flower2, 
-      color: "bg-green-100 text-green-600",
-      description: "Expert gardening and landscaping services"
-    },
-    { 
-      id: 5, 
-      name: "Car Repair", 
-      category: "professional", 
-      providers: 86, 
-      icon: Car, 
-      color: "bg-gray-100 text-gray-600",
-      description: "Vehicle maintenance and repair services"
-    },
-    { 
-      id: 6, 
-      name: "Hair & Beauty", 
-      category: "health", 
-      providers: 127, 
-      icon: Scissors, 
-      color: "bg-pink-100 text-pink-600",
-      description: "Professional hair styling and beauty services"
-    },
-    { 
-      id: 7, 
-      name: "Tutoring", 
-      category: "education", 
-      providers: 91, 
-      icon: GraduationCap, 
-      color: "bg-indigo-100 text-indigo-600",
-      description: "Private tutoring for all subjects and grade levels"
-    },
-    { 
-      id: 8, 
-      name: "Event Planning", 
-      category: "events", 
-      providers: 74, 
-      icon: CalendarDays, 
-      color: "bg-purple-100 text-purple-600",
-      description: "Comprehensive event planning and management services"
-    },
-  ];
-
-  // Filter services based on search, location, and category
-  const filteredServices = services.filter(service => {
-    const matchesSearch = service.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = category === "all" || service.category === category;
+  // Filter services based on search query and category
+  const filteredServices = SERVICES.filter(service => {
+    const matchesSearch = service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      service.description.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesCategory = selectedCategory ? service.category === selectedCategory : true;
+    
     return matchesSearch && matchesCategory;
   });
+
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(category === selectedCategory ? "" : category);
+    // Update URL without page refresh
+    const newLocation = category ? `/services?category=${category}` : "/services";
+    setLocation(newLocation);
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
-      
-      {/* Header */}
-      <header className="bg-white py-12 px-4 border-b border-gray-200">
-        <div className="container mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">Find Services</h1>
-              <p className="text-gray-600">Browse through our comprehensive list of services</p>
-            </div>
-          </div>
-          
-          {/* Search and Filter */}
-          <div className="bg-white p-4 rounded-xl shadow">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-              <div className="md:col-span-5 relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input 
-                  placeholder="Search for services..." 
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-              
-              <div className="md:col-span-3 relative">
-                <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                <Input 
-                  placeholder="Location..." 
-                  value={location}
-                  onChange={(e) => setLocationFilter(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-              
-              <div className="md:col-span-3">
-                <Select value={category} onValueChange={setCategory}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
-                    {categories.map(cat => (
-                      <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div className="md:col-span-1">
-                <Button className="w-full bg-yellow-500 hover:bg-yellow-600">
-                  <Search className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
 
-      {/* Main Content */}
-      <main className="flex-grow py-12 px-4 bg-gray-50">
-        <div className="container mx-auto">
-          <Tabs defaultValue="services" className="w-full">
-            <TabsList className="mb-8">
-              <TabsTrigger value="services">All Services</TabsTrigger>
-              <TabsTrigger value="categories">Categories</TabsTrigger>
-              <TabsTrigger value="popular">Popular</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="services">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredServices.map(service => (
-                  <div key={service.id} className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
-                    <div className="flex items-start">
-                      <div className={`w-12 h-12 rounded-full flex items-center justify-center mr-4 ${service.color}`}>
-                        <service.icon className="h-6 w-6" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-lg">{service.name}</h3>
-                        <p className="text-sm text-gray-500 mb-3">{service.providers} providers</p>
-                        <p className="text-gray-600 mb-4">{service.description}</p>
-                        <Button 
-                          variant="outline" 
-                          className="text-sm"
-                          onClick={() => setLocation(`/services/${service.id}`)}
-                        >
-                          Find Providers
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              {filteredServices.length === 0 && (
-                <div className="text-center py-12">
-                  <p className="text-gray-500">No services found matching your criteria</p>
-                  <Button 
-                    variant="link" 
-                    onClick={() => {
-                      setSearchTerm("");
-                      setCategory("all");
-                    }}
-                  >
-                    Clear filters
-                  </Button>
-                </div>
-              )}
-            </TabsContent>
-            
-            <TabsContent value="categories">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {categories.map(category => (
-                  <div 
-                    key={category.id} 
-                    className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow cursor-pointer"
-                    onClick={() => {
-                      setCategory(category.id);
-                      document.querySelector('[data-value="services"]')?.click();
-                    }}
-                  >
-                    <div className="flex items-center">
-                      <div className={`w-12 h-12 rounded-full flex items-center justify-center mr-4 ${category.color}`}>
-                        <category.icon className="h-6 w-6" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-lg">{category.name}</h3>
-                        <p className="text-sm text-gray-500">
-                          {services.filter(s => s.category === category.id).length} services
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="popular">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {services
-                  .sort((a, b) => b.providers - a.providers)
-                  .slice(0, 6)
-                  .map(service => (
-                    <div key={service.id} className="bg-white rounded-xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow">
-                      <div className="flex items-start">
-                        <div className={`w-12 h-12 rounded-full flex items-center justify-center mr-4 ${service.color}`}>
-                          <service.icon className="h-6 w-6" />
-                        </div>
-                        <div>
-                          <h3 className="font-semibold text-lg">{service.name}</h3>
-                          <p className="text-sm text-gray-500 mb-3">{service.providers} providers</p>
-                          <p className="text-gray-600 mb-4">{service.description}</p>
-                          <Button 
-                            variant="outline" 
-                            className="text-sm"
-                            onClick={() => setLocation(`/services/${service.id}`)}
-                          >
-                            Find Providers
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                ))}
-              </div>
-            </TabsContent>
-          </Tabs>
+      {/* Hero Section */}
+      <section className="bg-white py-12 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <h1 className="text-4xl font-bold mb-4 text-center text-gradient">Browse Our Services</h1>
+          <p className="text-gray-600 max-w-2xl mx-auto text-center mb-8">
+            Find the perfect service provider for your needs in Namibia
+          </p>
+
+          {/* Search */}
+          <div className="max-w-xl mx-auto relative">
+            <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+            <Input 
+              placeholder="Search for services..." 
+              className="input-modern pl-10"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
         </div>
-      </main>
+      </section>
+
+      {/* Categories */}
+      <section className="py-8 px-4 border-b border-gray-200 bg-white">
+        <div className="container mx-auto max-w-6xl">
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Button 
+              variant={selectedCategory === "" ? "default" : "outline"}
+              className={`rounded-full ${selectedCategory === "" ? "bg-blue-600 text-white" : ""}`}
+              onClick={() => handleCategorySelect("")}
+            >
+              All Services
+            </Button>
+            <Button 
+              variant={selectedCategory === "general" ? "default" : "outline"}
+              className={`rounded-full ${selectedCategory === "general" ? "bg-blue-600 text-white" : ""}`}
+              onClick={() => handleCategorySelect("general")}
+            >
+              <Briefcase className="h-4 w-4 mr-2" />
+              General Services
+            </Button>
+            <Button 
+              variant={selectedCategory === "home" ? "default" : "outline"}
+              className={`rounded-full ${selectedCategory === "home" ? "bg-blue-600 text-white" : ""}`}
+              onClick={() => handleCategorySelect("home")}
+            >
+              <HomeIcon className="h-4 w-4 mr-2" />
+              Home Services
+            </Button>
+            <Button 
+              variant={selectedCategory === "professional" ? "default" : "outline"}
+              className={`rounded-full ${selectedCategory === "professional" ? "bg-blue-600 text-white" : ""}`}
+              onClick={() => handleCategorySelect("professional")}
+            >
+              <User className="h-4 w-4 mr-2" />
+              Professional
+            </Button>
+            <Button 
+              variant={selectedCategory === "transportation" ? "default" : "outline"}
+              className={`rounded-full ${selectedCategory === "transportation" ? "bg-blue-600 text-white" : ""}`}
+              onClick={() => handleCategorySelect("transportation")}
+            >
+              <Truck className="h-4 w-4 mr-2" />
+              Transportation
+            </Button>
+            <Button 
+              variant={selectedCategory === "health" ? "default" : "outline"}
+              className={`rounded-full ${selectedCategory === "health" ? "bg-blue-600 text-white" : ""}`}
+              onClick={() => handleCategorySelect("health")}
+            >
+              <Heart className="h-4 w-4 mr-2" />
+              Health & Wellness
+            </Button>
+            <Button 
+              variant={selectedCategory === "freelance" ? "default" : "outline"}
+              className={`rounded-full ${selectedCategory === "freelance" ? "bg-blue-600 text-white" : ""}`}
+              onClick={() => handleCategorySelect("freelance")}
+            >
+              <HelpCircle className="h-4 w-4 mr-2" />
+              Freelancers
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Grid */}
+      <section className="py-12 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">
+              {selectedCategory 
+                ? `${selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1)} Services` 
+                : "All Services"}
+            </h2>
+            <Button variant="outline" className="rounded-full">
+              <Sliders className="h-4 w-4 mr-2" />
+              Filters
+            </Button>
+          </div>
+
+          {filteredServices.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredServices.map(service => (
+                <div key={service.id} className="modern-card-hover overflow-hidden flex flex-col h-full">
+                  <div className="h-48 relative overflow-hidden rounded-lg mb-4">
+                    <img 
+                      src={service.image} 
+                      alt={service.name}
+                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                    />
+                  </div>
+                  <div className="flex-1 flex flex-col">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="text-xl font-semibold">{service.name}</h3>
+                      <span className="text-blue-600 font-semibold">{service.price}</span>
+                    </div>
+                    <p className="text-gray-600 text-sm mb-3 flex-1">{service.description}</p>
+                    <div className="flex items-center text-sm text-gray-600 mb-2">
+                      <MapPin className="h-4 w-4 mr-1 text-gray-400" />
+                      {service.location}
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center">
+                        <div className="flex text-yellow-400">
+                          <Star className="h-4 w-4 fill-current" />
+                          <span className="ml-1 text-gray-700">{service.rating}</span>
+                        </div>
+                      </div>
+                      <Button 
+                        className="bg-blue-600 text-white hover:bg-blue-700 rounded-full text-sm"
+                        onClick={() => alert(`Booking ${service.name}`)}
+                      >
+                        Book Now
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-600">No services found matching your criteria</p>
+              <Button 
+                className="mt-4 btn-primary"
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedCategory("");
+                  setLocation("/services");
+                }}
+              >
+                Clear Filters
+              </Button>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="bg-blue-600 text-white py-12 px-4">
+        <div className="container mx-auto max-w-4xl text-center">
+          <h2 className="text-3xl font-bold mb-4">Are You a Service Provider?</h2>
+          <p className="text-lg mb-6">
+            Join our platform to reach thousands of potential customers and grow your business.
+          </p>
+          <Button
+            className="bg-white text-blue-600 hover:bg-gray-100 rounded-full px-8 py-3 text-lg font-medium"
+            onClick={() => setLocation("/sign-up")}
+          >
+            Become a Provider
+          </Button>
+        </div>
+      </section>
 
       <Footer />
     </div>

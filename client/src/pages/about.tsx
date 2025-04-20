@@ -1,7 +1,16 @@
 
-import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
-import { Users, Globe, Award, Clock, Shield, Target } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Users,
+  Target,
+  Award,
+  Shield,
+  Map,
+  Star,
+  ArrowRight
+} from "lucide-react";
+
 import Navbar from "@/components/navigation/navbar";
 import Footer from "@/components/navigation/footer";
 
@@ -11,217 +20,230 @@ export default function About() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
-      
-      {/* Header */}
-      <header className="bg-white py-12 px-4 border-b border-gray-200">
-        <div className="container mx-auto">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold mb-2">About Us</h1>
-            <p className="text-gray-600">Learn more about Namibian Service Hub</p>
+
+      {/* Hero Section */}
+      <section className="bg-white py-16 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-12">
+            <div className="max-w-xl">
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+                About <span className="text-gradient">Namibian Service Hub</span>
+              </h1>
+              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                We're on a mission to transform how services are discovered, booked, and delivered across Namibia, creating opportunities for service providers and convenience for customers.
+              </p>
+              <Button
+                className="btn-primary"
+                onClick={() => setLocation("/contact")}
+              >
+                Contact Us <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+
+            <div className="w-full max-w-md">
+              <div className="aspect-video rounded-2xl overflow-hidden shadow-md">
+                <img 
+                  src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80" 
+                  alt="Team at Namibian Service Hub"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </header>
+      </section>
 
-      {/* Main Content */}
-      <main className="flex-grow py-12 px-4 bg-gray-50">
-        <div className="container mx-auto">
-          {/* Our Mission */}
-          <section className="max-w-4xl mx-auto mb-16">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                To connect Namibians with skilled and trusted service providers, empowering service professionals to grow their business while helping customers find quality services with ease.
-              </p>
-            </div>
-            
-            <div className="bg-white p-8 rounded-xl shadow-sm">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                  <h3 className="text-xl font-semibold mb-4">For Customers</h3>
-                  <p className="text-gray-600 mb-4">
-                    We're committed to making it simple for you to find trusted, quality service providers across Namibia. Our platform offers a convenient way to book services, compare providers, and ensure you receive excellent value for your money.
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-start">
-                      <div className="h-5 w-5 text-green-500 mr-2">✓</div>
-                      <span>Access to verified service providers</span>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="h-5 w-5 text-green-500 mr-2">✓</div>
-                      <span>Secure booking and payment system</span>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="h-5 w-5 text-green-500 mr-2">✓</div>
-                      <span>Transparent pricing and reviews</span>
-                    </li>
-                  </ul>
-                </div>
-                
-                <div>
-                  <h3 className="text-xl font-semibold mb-4">For Service Providers</h3>
-                  <p className="text-gray-600 mb-4">
-                    We offer a platform for skilled professionals to showcase their services, find new clients, and grow their business. Our easy-to-use tools help you manage bookings, payments, and customer relationships effectively.
-                  </p>
-                  <ul className="space-y-2">
-                    <li className="flex items-start">
-                      <div className="h-5 w-5 text-green-500 mr-2">✓</div>
-                      <span>Increase visibility to potential clients</span>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="h-5 w-5 text-green-500 mr-2">✓</div>
-                      <span>Simple booking and schedule management</span>
-                    </li>
-                    <li className="flex items-start">
-                      <div className="h-5 w-5 text-green-500 mr-2">✓</div>
-                      <span>Secure, timely payments</span>
-                    </li>
-                  </ul>
-                </div>
+      {/* Our Mission & Vision */}
+      <section className="py-16 px-4 bg-gray-50">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className="modern-card">
+              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+                <Target className="h-6 w-6 text-blue-600" />
               </div>
-            </div>
-          </section>
-          
-          {/* Our Story */}
-          <section className="max-w-4xl mx-auto mb-16">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-4">Our Story</h2>
-            </div>
-            
-            <div className="bg-white p-8 rounded-xl shadow-sm mb-8">
+              <h2 className="text-2xl font-bold mb-4">Our Mission</h2>
               <p className="text-gray-600 mb-4">
-                Namibian Service Hub was founded in 2023 by a team of entrepreneurs who recognized the challenges faced by both service providers and customers in Namibia.
-              </p>
-              <p className="text-gray-600 mb-4">
-                We observed that skilled professionals often struggled to find consistent work and expand their client base, while customers had difficulty finding reliable service providers for their needs.
-              </p>
-              <p className="text-gray-600 mb-4">
-                Our platform was created to bridge this gap by providing a trusted marketplace where service professionals can showcase their skills and customers can easily find and book the services they need.
+                To create a reliable and accessible platform that connects quality service providers with customers in Namibia, simplifying the process of finding, booking, and delivering services.
               </p>
               <p className="text-gray-600">
-                Starting with just a few service categories in Windhoek, we've now expanded to cover multiple regions across Namibia and offer a wide range of services from home maintenance to professional consulting.
+                We aim to empower local professionals while providing customers with convenient access to the services they need, ultimately improving service delivery across the country.
               </p>
             </div>
-            
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1 bg-white p-6 rounded-xl shadow-sm text-center">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Users className="h-6 w-6 text-blue-600" />
-                </div>
-                <h3 className="text-3xl font-bold text-blue-600 mb-2">500+</h3>
-                <p className="text-gray-600">Service Providers</p>
+
+            <div className="modern-card">
+              <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+                <Users className="h-6 w-6 text-blue-600" />
               </div>
-              
-              <div className="flex-1 bg-white p-6 rounded-xl shadow-sm text-center">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Globe className="h-6 w-6 text-blue-600" />
-                </div>
-                <h3 className="text-3xl font-bold text-blue-600 mb-2">14</h3>
-                <p className="text-gray-600">Regions Covered</p>
-              </div>
-              
-              <div className="flex-1 bg-white p-6 rounded-xl shadow-sm text-center">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Award className="h-6 w-6 text-blue-600" />
-                </div>
-                <h3 className="text-3xl font-bold text-blue-600 mb-2">12k+</h3>
-                <p className="text-gray-600">Completed Jobs</p>
-              </div>
-            </div>
-          </section>
-          
-          {/* Our Values */}
-          <section className="max-w-4xl mx-auto">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-4">Our Values</h2>
-              <p className="text-gray-600 max-w-3xl mx-auto">
-                These core principles guide everything we do at Namibian Service Hub
+              <h2 className="text-2xl font-bold mb-4">Our Vision</h2>
+              <p className="text-gray-600 mb-4">
+                To become Namibia's leading service marketplace, known for excellence, reliability, and innovation in connecting service providers with customers.
+              </p>
+              <p className="text-gray-600">
+                We envision a future where every Namibian has easy access to quality services, and where skilled professionals can build successful businesses through our platform.
               </p>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white p-6 rounded-xl shadow-sm">
-                <div className="flex items-start">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                    <Shield className="h-6 w-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2">Trust & Safety</h3>
-                    <p className="text-gray-600">
-                      We prioritize creating a safe and trustworthy environment through thorough verification processes and secure systems.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-white p-6 rounded-xl shadow-sm">
-                <div className="flex items-start">
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
-                    <Award className="h-6 w-6 text-green-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2">Quality Service</h3>
-                    <p className="text-gray-600">
-                      We're committed to maintaining high standards by promoting and rewarding excellence in service delivery.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-white p-6 rounded-xl shadow-sm">
-                <div className="flex items-start">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                    <Clock className="h-6 w-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2">Reliability</h3>
-                    <p className="text-gray-600">
-                      We ensure that our platform operates reliably and that service providers deliver on their commitments.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-white p-6 rounded-xl shadow-sm">
-                <div className="flex items-start">
-                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4">
-                    <Target className="h-6 w-6 text-purple-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2">Community Impact</h3>
-                    <p className="text-gray-600">
-                      We're dedicated to supporting local economic growth by connecting Namibian service providers with customers in their communities.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-          
-          {/* CTA */}
-          <section className="max-w-4xl mx-auto mt-16 text-center">
-            <div className="bg-blue-50 p-8 rounded-xl">
-              <h2 className="text-2xl font-bold mb-4">Join Our Growing Community</h2>
-              <p className="text-gray-600 mb-6">
-                Whether you're looking for services or offering your skills, we invite you to be part of our platform.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button 
-                  className="bg-blue-600 text-white hover:bg-blue-700"
-                  onClick={() => setLocation("/sign-up")}
-                >
-                  Create an Account
-                </Button>
-                <Button 
-                  variant="outline"
-                  onClick={() => setLocation("/contact")}
-                >
-                  Contact Us
-                </Button>
-              </div>
-            </div>
-          </section>
+          </div>
         </div>
-      </main>
+      </section>
+
+      {/* Our Values */}
+      <section className="py-16 px-4 bg-white">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-3">Our Core Values</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              These principles guide everything we do at Namibian Service Hub
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="modern-card text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Award className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">Excellence</h3>
+              <p className="text-gray-600">
+                We strive for excellence in every aspect of our platform, from user experience to customer support.
+              </p>
+            </div>
+
+            <div className="modern-card text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Shield className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">Trust & Safety</h3>
+              <p className="text-gray-600">
+                We prioritize creating a safe and trustworthy environment for both customers and service providers.
+              </p>
+            </div>
+
+            <div className="modern-card text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Star className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-semibold mb-3">Quality</h3>
+              <p className="text-gray-600">
+                We're committed to maintaining high standards and promoting quality service delivery across all categories.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Story */}
+      <section className="py-16 px-4 bg-gray-50">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-3">Our Story</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              How Namibian Service Hub came to be
+            </p>
+          </div>
+
+          <div className="modern-card">
+            <div className="prose prose-lg mx-auto">
+              <p>
+                Namibian Service Hub was founded in 2022 by a team of entrepreneurs who recognized a significant gap in Namibia's service industry. They observed that finding reliable service providers was often challenging, while skilled professionals struggled to connect with potential customers.
+              </p>
+              <p>
+                What began as a small startup has grown into Namibia's premier service marketplace, connecting thousands of service providers with customers across the country. Our journey has been guided by our commitment to creating value for our users and improving service delivery in Namibia.
+              </p>
+              <p>
+                Today, we're proud to facilitate thousands of service bookings each month, helping Namibians find the help they need while creating economic opportunities for service providers. We continue to innovate and improve our platform based on user feedback and evolving market needs.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Team Section */}
+      <section className="py-16 px-4 bg-white">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-3">Our Leadership Team</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Meet the people behind Namibian Service Hub
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Team Member 1 */}
+            <div className="modern-card text-center">
+              <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80" 
+                  alt="Team Member"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h3 className="text-xl font-semibold mb-1">Sarah Nakamwe</h3>
+              <p className="text-blue-600 mb-4">Chief Executive Officer</p>
+              <p className="text-gray-600 text-sm">
+                With over 15 years of experience in technology and business development, Sarah leads our vision to transform service delivery in Namibia.
+              </p>
+            </div>
+
+            {/* Team Member 2 */}
+            <div className="modern-card text-center">
+              <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80" 
+                  alt="Team Member"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h3 className="text-xl font-semibold mb-1">David Hamutenya</h3>
+              <p className="text-blue-600 mb-4">Chief Technology Officer</p>
+              <p className="text-gray-600 text-sm">
+                David brings extensive experience in software development and product management, overseeing our platform's technical strategy and innovation.
+              </p>
+            </div>
+
+            {/* Team Member 3 */}
+            <div className="modern-card text-center">
+              <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80" 
+                  alt="Team Member"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h3 className="text-xl font-semibold mb-1">Maria Nangolo</h3>
+              <p className="text-blue-600 mb-4">Head of Operations</p>
+              <p className="text-gray-600 text-sm">
+                Maria ensures the smooth daily operation of our platform, focusing on service quality, customer satisfaction, and provider success.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 px-4 bg-blue-600 text-white">
+        <div className="container mx-auto max-w-4xl text-center">
+          <h2 className="text-3xl font-bold mb-6">
+            Join the Namibian Service Hub Community
+          </h2>
+          <p className="text-xl mb-8 max-w-2xl mx-auto">
+            Whether you're looking for services or offering them, become part of our growing community today.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              className="bg-white text-blue-600 hover:bg-gray-100 rounded-full px-8 py-3 text-lg font-medium"
+              onClick={() => setLocation("/sign-up")}
+            >
+              Sign Up Now
+            </Button>
+            <Button
+              variant="outline"
+              className="bg-transparent text-white border-white hover:bg-white/10 rounded-full px-8 py-3 text-lg font-medium"
+              onClick={() => setLocation("/contact")}
+            >
+              Contact Us
+            </Button>
+          </div>
+        </div>
+      </section>
 
       <Footer />
     </div>

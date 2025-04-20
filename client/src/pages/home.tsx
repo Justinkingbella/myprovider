@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
@@ -5,26 +6,20 @@ import { useLocation } from "wouter";
 import {
   Search,
   MapPin,
-  Clock,
   Shield,
+  Clock,
   CreditCard,
-  User,
   MessageSquare,
   ArrowRight,
   Check,
   Star,
   Briefcase,
-  Heart,
+  Home as HomeIcon,
+  User,
   Truck,
+  Heart,
   HelpCircle,
-  Brush,
-  Wrench,
-  Zap,
-  Flower2,
-  Car,
-  Scissors,
-  GraduationCap,
-  CalendarDays,
+  Zap
 } from "lucide-react";
 
 import Navbar from "@/components/navigation/navbar";
@@ -41,25 +36,25 @@ export default function Home() {
       <header className="bg-white py-16 md:py-24 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="flex flex-col md:flex-row items-center justify-between gap-12">
-            <div className="max-w-xl animate-in fade-in slide-in-from-left-4 duration-700">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 leading-tight">
-                Your One-Stop Marketplace <span className="text-blue-600">for</span><br />
-                <span className="text-blue-600">Local Services in Namibia</span>
+            <div className="max-w-xl animate-in fade-in slide-in-from-left duration-500">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                Your One-Stop Marketplace <span className="text-gradient">for</span><br />
+                <span className="text-gradient">Local Services in Namibia</span>
               </h1>
-              <p className="text-lg mb-8 text-gray-600">
+              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
                 Affordable services with trusted service providers for all your needs - from
-                home repairs to services, skilled professionals to handymen.
+                home repairs to skilled professionals to handymen.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button
-                  className="bg-blue-600 text-white hover:bg-blue-700 text-lg px-8 py-6 h-auto"
+                  className="btn-primary"
                   onClick={() => setLocation("/sign-up")}
                 >
                   Get Started
                 </Button>
                 <Button
                   variant="outline"
-                  className="border-gray-300 hover:bg-gray-100 text-lg px-8 py-6 h-auto"
+                  className="btn-secondary"
                   onClick={() => setLocation("/services")}
                 >
                   Browse Services
@@ -67,20 +62,20 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="w-full max-w-md animate-in fade-in slide-in-from-right-4 duration-700">
-              <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+            <div className="w-full max-w-md animate-in fade-in slide-in-from-right duration-500">
+              <div className="modern-card">
                 <h3 className="text-xl font-semibold mb-4">Find a Service</h3>
                 <div className="space-y-4 mb-4">
                   <div className="relative">
                     <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                    <Input placeholder="Search for services..." className="pl-10" />
+                    <Input placeholder="Search for services..." className="input-modern pl-10" />
                   </div>
                   <div className="relative">
                     <MapPin className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                    <Input placeholder="Your location" className="pl-10" />
+                    <Input placeholder="Your location" className="input-modern pl-10" />
                   </div>
                 </div>
-                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                <Button className="w-full btn-primary">
                   Find Services
                 </Button>
 
@@ -116,7 +111,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Category 1 */}
-            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow text-center">
+            <div className="modern-card-hover text-center">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Briefcase className="h-8 w-8 text-blue-600" />
               </div>
@@ -127,16 +122,16 @@ export default function Home() {
               <Button
                 variant="outline"
                 onClick={() => setLocation("/services?category=general")}
-                className="text-blue-600 border-blue-600 hover:bg-blue-50"
+                className="text-blue-600 border-blue-600 hover:bg-blue-50 rounded-full"
               >
                 View Services
               </Button>
             </div>
 
             {/* Category 2 */}
-            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow text-center">
+            <div className="modern-card-hover text-center">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="h-8 w-8 text-blue-600" />
+                <HomeIcon className="h-8 w-8 text-blue-600" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Home Services</h3>
               <p className="text-gray-600 mb-4">
@@ -145,14 +140,14 @@ export default function Home() {
               <Button
                 variant="outline"
                 onClick={() => setLocation("/services?category=home")}
-                className="text-blue-600 border-blue-600 hover:bg-blue-50"
+                className="text-blue-600 border-blue-600 hover:bg-blue-50 rounded-full"
               >
                 View Services
               </Button>
             </div>
 
             {/* Category 3 */}
-            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow text-center">
+            <div className="modern-card-hover text-center">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <User className="h-8 w-8 text-blue-600" />
               </div>
@@ -163,14 +158,14 @@ export default function Home() {
               <Button
                 variant="outline"
                 onClick={() => setLocation("/services?category=professional")}
-                className="text-blue-600 border-blue-600 hover:bg-blue-50"
+                className="text-blue-600 border-blue-600 hover:bg-blue-50 rounded-full"
               >
                 View Services
               </Button>
             </div>
 
             {/* Category 4 */}
-            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow text-center">
+            <div className="modern-card-hover text-center">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Truck className="h-8 w-8 text-blue-600" />
               </div>
@@ -181,14 +176,14 @@ export default function Home() {
               <Button
                 variant="outline"
                 onClick={() => setLocation("/services?category=transportation")}
-                className="text-blue-600 border-blue-600 hover:bg-blue-50"
+                className="text-blue-600 border-blue-600 hover:bg-blue-50 rounded-full"
               >
                 View Services
               </Button>
             </div>
 
             {/* Category 5 */}
-            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow text-center">
+            <div className="modern-card-hover text-center">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Heart className="h-8 w-8 text-blue-600" />
               </div>
@@ -199,14 +194,14 @@ export default function Home() {
               <Button
                 variant="outline"
                 onClick={() => setLocation("/services?category=health")}
-                className="text-blue-600 border-blue-600 hover:bg-blue-50"
+                className="text-blue-600 border-blue-600 hover:bg-blue-50 rounded-full"
               >
                 View Services
               </Button>
             </div>
 
             {/* Category 6 */}
-            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow text-center">
+            <div className="modern-card-hover text-center">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <HelpCircle className="h-8 w-8 text-blue-600" />
               </div>
@@ -217,7 +212,7 @@ export default function Home() {
               <Button
                 variant="outline"
                 onClick={() => setLocation("/services?category=freelance")}
-                className="text-blue-600 border-blue-600 hover:bg-blue-50"
+                className="text-blue-600 border-blue-600 hover:bg-blue-50 rounded-full"
               >
                 View Services
               </Button>
@@ -238,19 +233,19 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Step 1 */}
-            <div className="bg-white p-6 rounded-lg border border-gray-200">
-              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4 text-blue-600 font-bold">
+            <div className="modern-card relative">
+              <div className="absolute -top-4 -left-4 w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold shadow-md">
                 1
               </div>
               <h3 className="text-xl font-semibold mb-3">Search for a Service</h3>
               <p className="text-gray-600">
-                Browse through our range of services or use the search function to find what you need.
+                Browse through our range of services or use the search function to find exactly what you need.
               </p>
             </div>
 
             {/* Step 2 */}
-            <div className="bg-white p-6 rounded-lg border border-gray-200">
-              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4 text-blue-600 font-bold">
+            <div className="modern-card relative">
+              <div className="absolute -top-4 -left-4 w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold shadow-md">
                 2
               </div>
               <h3 className="text-xl font-semibold mb-3">Book a Time Slot</h3>
@@ -260,8 +255,8 @@ export default function Home() {
             </div>
 
             {/* Step 3 */}
-            <div className="bg-white p-6 rounded-lg border border-gray-200">
-              <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4 text-blue-600 font-bold">
+            <div className="modern-card relative">
+              <div className="absolute -top-4 -left-4 w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold shadow-md">
                 3
               </div>
               <h3 className="text-xl font-semibold mb-3">Enjoy Quality Service</h3>
@@ -271,12 +266,12 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="text-center mt-8">
+          <div className="text-center mt-10">
             <Button
-              className="bg-blue-600 text-white hover:bg-blue-700"
+              className="btn-primary"
               onClick={() => setLocation("/how-it-works")}
             >
-              Learn More
+              Learn More <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -294,7 +289,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Feature 1 */}
-            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all">
+            <div className="modern-card-hover">
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
                 <Clock className="h-6 w-6 text-blue-600" />
               </div>
@@ -305,7 +300,7 @@ export default function Home() {
             </div>
 
             {/* Feature 2 */}
-            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all">
+            <div className="modern-card-hover">
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
                 <Shield className="h-6 w-6 text-blue-600" />
               </div>
@@ -316,7 +311,7 @@ export default function Home() {
             </div>
 
             {/* Feature 3 */}
-            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all">
+            <div className="modern-card-hover">
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
                 <CreditCard className="h-6 w-6 text-blue-600" />
               </div>
@@ -327,7 +322,7 @@ export default function Home() {
             </div>
 
             {/* Feature 4 */}
-            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all">
+            <div className="modern-card-hover">
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
                 <MapPin className="h-6 w-6 text-blue-600" />
               </div>
@@ -338,7 +333,7 @@ export default function Home() {
             </div>
 
             {/* Feature 5 */}
-            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all">
+            <div className="modern-card-hover">
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
                 <Star className="h-6 w-6 text-blue-600" />
               </div>
@@ -349,7 +344,7 @@ export default function Home() {
             </div>
 
             {/* Feature 6 */}
-            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all">
+            <div className="modern-card-hover">
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
                 <MessageSquare className="h-6 w-6 text-blue-600" />
               </div>
@@ -373,14 +368,14 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
-              className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 text-lg"
+              className="bg-white text-blue-600 hover:bg-gray-100 rounded-full px-8 py-3 text-lg font-medium"
               onClick={() => setLocation("/sign-up")}
             >
               Get Started
             </Button>
             <Button
               variant="outline"
-              className="bg-transparent text-white border-white hover:bg-white/10 px-8 py-3 text-lg"
+              className="bg-transparent text-white border-white hover:bg-white/10 rounded-full px-8 py-3 text-lg font-medium"
               onClick={() => setLocation("/services")}
             >
               Become a Provider
