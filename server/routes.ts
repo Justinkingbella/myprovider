@@ -320,6 +320,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get event type and data
       const { type, data } = evt.data;
       
+      console.log("Received webhook event:", type);
+      
       // Handle user creation
       if (type === "user.created") {
         const { id, email_addresses, first_name, last_name } = data;

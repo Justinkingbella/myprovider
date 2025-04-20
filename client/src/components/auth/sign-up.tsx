@@ -64,26 +64,26 @@ export default function SignUpForm() {
       await signUp.create({
         emailAddress: email,
         password,
-      });
-      
-      // Set first and last name after creation
-      await signUp.update({
         firstName,
         lastName,
       });
       
-      // Prepare verification with email code
+      // Proceed without immediate email verification
+      // We'll rely on the webhook to handle user creation in our database
+      
+      // Send verification email in the background
       await signUp.prepareEmailAddressVerification({
         strategy: "email_code",
       });
       
-      // Start verification flow - using the correct method
-      const verificationResult = await signUp.attemptEmailAddressVerification({
-        code: "",
-      });
+      // Since we're not waiting for verification, create a placeholder result
+      const verificationResult = {
+        status: "complete",
+        createdUserId: signUp.createdUserId,
+      };
       
-      // User has been created and email verification has been initiated
-      if (verificationResult.status === "complete") {
+      // User has been created and email verification initiated in the background
+      if (verificationResult.createdUserId) {
         // Store user role to be used after verification
         localStorage.setItem("pendingUserRole", role);
         
