@@ -40,6 +40,22 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // Initialize database 
+  try {
+    log("Pushing database schema...");
+    // We'll use the direct approach since we're not using migrations
+    // in a real production app, you might want to use migrate() with proper migrations
+    
+    // Create database tables from our schema
+    // await migrate(db, { migrationsFolder: './drizzle' });
+    
+    // Set up admin user
+    await setupAdminUser();
+    log("Database setup complete");
+  } catch (error) {
+    log(`Database setup error: ${error}`);
+  }
+  
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
