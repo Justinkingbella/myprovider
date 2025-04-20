@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { 
   Card, 
@@ -26,7 +25,7 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Camera, Check, MapPin, DollarSign, Clock, CreditCard, FileCheck } from "lucide-react";
+import { Camera, Check, MapPin, CircleDollarSign, Clock, CreditCard, FileCheck } from "lucide-react";
 
 interface ProviderProfileProps {
   user: UserType | null;
@@ -93,7 +92,7 @@ export default function ProviderProfile({ user }: ProviderProfileProps) {
                   <Camera className="h-4 w-4" />
                 </Button>
               </div>
-              
+
               <div className="flex-1 space-y-2">
                 <h3 className="text-xl font-semibold">{businessName || "Your Business Name"}</h3>
                 <div className="flex flex-wrap gap-2">
@@ -115,7 +114,7 @@ export default function ProviderProfile({ user }: ProviderProfileProps) {
                 <TabsTrigger value="availability">Availability</TabsTrigger>
                 <TabsTrigger value="payment">Payment Details</TabsTrigger>
               </TabsList>
-              
+
               <TabsContent value="basic" className="space-y-4 pt-4">
                 <div className="grid gap-4">
                   <div className="grid grid-cols-4 gap-4">
@@ -138,7 +137,7 @@ export default function ProviderProfile({ user }: ProviderProfileProps) {
                       />
                     </div>
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="description">Description</Label>
                     <Textarea 
@@ -152,11 +151,11 @@ export default function ProviderProfile({ user }: ProviderProfileProps) {
                       Provide a detailed description of your services, experience, and specialties.
                     </p>
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="rate">Hourly Rate (N$)</Label>
                     <div className="flex items-center">
-                      <DollarSign className="mr-2 h-4 w-4 text-muted-foreground" />
+                      <CircleDollarSign className="mr-2 h-4 w-4 text-muted-foreground" />
                       <Input 
                         id="rate" 
                         placeholder="0.00" 
@@ -171,7 +170,7 @@ export default function ProviderProfile({ user }: ProviderProfileProps) {
                   </div>
                 </div>
               </TabsContent>
-              
+
               <TabsContent value="services" className="space-y-4 pt-4">
                 <div className="space-y-4">
                   <div>
@@ -179,7 +178,7 @@ export default function ProviderProfile({ user }: ProviderProfileProps) {
                     <p className="text-sm text-muted-foreground mb-2">
                       Select regions where you offer your services.
                     </p>
-                    
+
                     <div className="flex flex-wrap gap-2 mb-4">
                       {locations.map((loc) => (
                         <Badge key={loc} className="flex items-center gap-1 bg-blue-100 text-blue-800">
@@ -196,7 +195,7 @@ export default function ProviderProfile({ user }: ProviderProfileProps) {
                         </Badge>
                       ))}
                     </div>
-                    
+
                     <div className="flex gap-2">
                       <Select value={selectedLocation} onValueChange={setSelectedLocation}>
                         <SelectTrigger>
@@ -213,7 +212,7 @@ export default function ProviderProfile({ user }: ProviderProfileProps) {
                   </div>
                 </div>
               </TabsContent>
-              
+
               <TabsContent value="availability" className="space-y-4 pt-4">
                 <div className="space-y-4">
                   <div>
@@ -239,7 +238,7 @@ export default function ProviderProfile({ user }: ProviderProfileProps) {
                       ))}
                     </div>
                   </div>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="start-time">Start Time</Label>
@@ -268,7 +267,7 @@ export default function ProviderProfile({ user }: ProviderProfileProps) {
                   </div>
                 </div>
               </TabsContent>
-              
+
               <TabsContent value="payment" className="space-y-4 pt-4">
                 <div className="space-y-4">
                   <div>
@@ -283,7 +282,7 @@ export default function ProviderProfile({ user }: ProviderProfileProps) {
                       />
                     </div>
                   </div>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="account-number">Account Number</Label>
@@ -304,7 +303,7 @@ export default function ProviderProfile({ user }: ProviderProfileProps) {
                       />
                     </div>
                   </div>
-                  
+
                   <div className="flex items-start space-x-2 mt-2">
                     <FileCheck className="h-5 w-5 text-muted-foreground mt-0.5" />
                     <p className="text-sm text-muted-foreground">
@@ -315,7 +314,7 @@ export default function ProviderProfile({ user }: ProviderProfileProps) {
                 </div>
               </TabsContent>
             </Tabs>
-            
+
             <div className="flex justify-end pt-4">
               <Button onClick={handleSaveProfile}>Save Profile</Button>
             </div>
