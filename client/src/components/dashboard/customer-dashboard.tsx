@@ -1,191 +1,129 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useUser } from "@clerk/clerk-react";
-import { User, Appointment } from "@shared/schema";
-import { Button } from "@/components/ui/button";
-import { StatsCard } from "@/components/ui/stats-card";
-import { DataTable } from "@/components/ui/data-table";
-import { PaginationState } from "@tanstack/react-table";
-import { useToast } from "@/hooks/use-toast";
-import { Loader2, Clock, ClipboardList, PlusCircle } from "lucide-react";
-import { format } from "date-fns";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { User, Calendar, Search, Heart, MessageSquare, Star, Gift } from "lucide-react";
+import { User as UserType } from "@shared/schema";
 
-export default function CustomerDashboard() {
-  const { toast } = useToast();
-  const { user } = useUser();
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 5,
-  });
+// Customer dashboard panels
+import CustomerProfile from "./customer/customer-profile";
+import ServiceSearch from "./customer/service-search";
+import CustomerBookings from "./customer/customer-bookings";
+import FavoriteProviders from "./customer/favorite-providers";
+import ProviderMessages from "./customer/provider-messages";
+import CustomerReviews from "./customer/customer-reviews";
+import ReferralRewards from "./customer/referral-rewards";
 
-  // Fetch current user info
-  const { data: currentUser, isLoading: isLoadingUser } = useQuery<User>({
-    queryKey: ["/api/users/me"],
-  });
+interface CustomerDashboardProps {
+  user: UserType | null;
+}
 
-  // Fetch appointments for the customer
-  const { data: appointments, isLoading: isLoadingAppointments } = useQuery<Appointment[]>({
-    queryKey: ["/api/appointments/me"],
-    enabled: !!currentUser?.id,
-  });
+export default function CustomerDashboard({ user }: CustomerDashboardProps) {
+  const [activeTab, setActiveTab] = useState("search");
 
-  // Calculate appointment statistics
-  const appointmentStats = {
-    upcoming: appointments?.filter(a => 
-      a.status !== "completed" && a.status !== "cancelled" && 
-      new Date(a.dateTime) > new Date()
-    ).length || 0,
-    history: appointments?.filter(a => 
-      a.status === "completed" || a.status === "cancelled"
-    ).length || 0,
+  // Stats for overview cards
+  const stats = {
+    activeBookings: 2,
+    completedBookings: 14,
+    favoriteProviders: 8,
+    unreadMessages: 3,
+    pendingReviews: 2,
+    referralCredits: 150,
+    loyaltyPoints: 750
   };
 
-  // Define columns for the appointment table
-  const appointmentColumns = [
-    {
-      accessorKey: "providerName",
-      header: "Provider",
-      cell: ({ row }: any) => "Provider #" + row.original.providerId,
-    },
-    {
-      accessorKey: "serviceType",
-      header: "Service",
-    },
-    {
-      accessorKey: "dateTime",
-      header: "Date & Time",
-      cell: ({ row }: any) => {
-        const date = new Date(row.original.dateTime);
-        return format(date, "MMM d, yyyy - h:mm a");
-      },
-    },
-    {
-      accessorKey: "status",
-      header: "Status",
-      cell: ({ row }: any) => {
-        const status = row.original.status;
-        let bgColor = "";
-        let textColor = "";
-        
-        switch (status) {
-          case "confirmed":
-            bgColor = "bg-green-100";
-            textColor = "text-green-800";
-            break;
-          case "pending":
-            bgColor = "bg-yellow-100";
-            textColor = "text-yellow-800";
-            break;
-          case "cancelled":
-            bgColor = "bg-red-100";
-            textColor = "text-red-800";
-            break;
-          case "completed":
-            bgColor = "bg-blue-100";
-            textColor = "text-blue-800";
-            break;
-          default:
-            bgColor = "bg-gray-100";
-            textColor = "text-gray-800";
-        }
-        
-        return (
-          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${bgColor} ${textColor}`}>
-            {status.charAt(0).toUpperCase() + status.slice(1)}
-          </span>
-        );
-      },
-    },
-    {
-      id: "actions",
-      header: "Actions",
-      cell: ({ row }: any) => (
-        <Button 
-          variant="link" 
-          size="sm" 
-          onClick={() => {
-            toast({
-              title: "View details",
-              description: `You clicked to view details for appointment #${row.original.id}`,
-            });
-          }}
-        >
-          Details
-        </Button>
-      ),
-    },
-  ];
-
-  if (isLoadingUser || isLoadingAppointments) {
-    return (
-      <div className="flex items-center justify-center h-full py-16">
-        <Loader2 className="h-8 w-8 animate-spin text-green-600" />
-        <span className="ml-2">Loading dashboard...</span>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-8">
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <StatsCard
-          title="Upcoming Appointments"
-          value={appointmentStats.upcoming}
-          icon={<Clock className="h-6 w-6 text-white" />}
-          linkText="View calendar"
-          linkHref="#calendar"
-          color="green"
-        />
-        
-        <StatsCard
-          title="Service History"
-          value={appointmentStats.history}
-          icon={<ClipboardList className="h-6 w-6 text-white" />}
-          linkText="View history"
-          linkHref="#history"
-          color="indigo"
-        />
-        
-        <StatsCard
-          title="Schedule New Service"
-          value="Book Now"
-          valueClass="text-green-600"
-          icon={<PlusCircle className="h-6 w-6 text-white" />}
-          linkText="Find providers"
-          linkHref="#providers"
-          color="red"
-        />
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold tracking-tight">Customer Dashboard</h1>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Bookings</CardTitle>
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.activeBookings}</div>
+            <p className="text-xs text-muted-foreground">
+              {stats.completedBookings} completed
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Favorites</CardTitle>
+            <Heart className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.favoriteProviders}</div>
+            <p className="text-xs text-muted-foreground">
+              Saved service providers
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Messages</CardTitle>
+            <MessageSquare className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.unreadMessages}</div>
+            <p className="text-xs text-muted-foreground">
+              Unread provider messages
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Rewards</CardTitle>
+            <Gift className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">N${stats.referralCredits}</div>
+            <p className="text-xs text-muted-foreground">
+              {stats.loyaltyPoints} loyalty points
+            </p>
+          </CardContent>
+        </Card>
       </div>
-      
-      <div className="bg-white shadow rounded-lg overflow-hidden" id="appointments">
-        <div className="p-4 sm:p-6 flex justify-between items-center">
-          <h2 className="text-lg font-medium text-gray-900">Your Appointments</h2>
-          <Button 
-            onClick={() => {
-              toast({
-                title: "Schedule New",
-                description: "You clicked to schedule a new appointment",
-              });
-            }}
-          >
-            Schedule New
-          </Button>
-        </div>
-        
-        {appointments && appointments.length > 0 ? (
-          <DataTable 
-            columns={appointmentColumns} 
-            data={appointments.filter(a => 
-              a.status !== "cancelled" && 
-              new Date(a.dateTime) > new Date().setDate(new Date().getDate() - 7) // Show recent and future appointments
-            )} 
-            pagination={pagination}
-            onPaginationChange={setPagination}
-          />
-        ) : (
-          <div className="p-4 text-center text-gray-500">No appointments found</div>
-        )}
-      </div>
+
+      <Tabs defaultValue="search" className="space-y-4">
+        <TabsList className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7">
+          <TabsTrigger value="search">Find Services</TabsTrigger>
+          <TabsTrigger value="bookings">My Bookings</TabsTrigger>
+          <TabsTrigger value="favorites">Favorites</TabsTrigger>
+          <TabsTrigger value="messages">Messages</TabsTrigger>
+          <TabsTrigger value="reviews">My Reviews</TabsTrigger>
+          <TabsTrigger value="rewards">Rewards</TabsTrigger>
+          <TabsTrigger value="profile">Profile</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="search" className="space-y-4">
+          <ServiceSearch />
+        </TabsContent>
+
+        <TabsContent value="bookings" className="space-y-4">
+          <CustomerBookings />
+        </TabsContent>
+
+        <TabsContent value="favorites" className="space-y-4">
+          <FavoriteProviders />
+        </TabsContent>
+
+        <TabsContent value="messages" className="space-y-4">
+          <ProviderMessages />
+        </TabsContent>
+
+        <TabsContent value="reviews" className="space-y-4">
+          <CustomerReviews />
+        </TabsContent>
+
+        <TabsContent value="rewards" className="space-y-4">
+          <ReferralRewards />
+        </TabsContent>
+
+        <TabsContent value="profile" className="space-y-4">
+          <CustomerProfile user={user} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

@@ -1,173 +1,130 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useUser } from "@clerk/clerk-react";
-import { User, Appointment } from "@shared/schema";
-import { Button } from "@/components/ui/button";
-import { StatsCard } from "@/components/ui/stats-card";
-import { DataTable } from "@/components/ui/data-table";
-import { PaginationState } from "@tanstack/react-table";
-import { useToast } from "@/hooks/use-toast";
-import { Loader2, Users, BarChart2, Clock } from "lucide-react";
-import { format } from "date-fns";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { User, Calendar, DollarSign, Settings, Star, MessageSquare, Users } from "lucide-react";
+import { User as UserType } from "@shared/schema";
 
-export default function ProviderDashboard() {
-  const { toast } = useToast();
-  const { user } = useUser();
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 5,
-  });
+// Provider dashboard panels
+import ProviderProfile from "./provider/provider-profile";
+import ServiceManagement from "./provider/service-management";
+import BookingCalendar from "./provider/booking-calendar";
+import EarningsPayout from "./provider/earnings-payout";
+import CustomerMessages from "./provider/customer-messages";
+import ReviewsRatings from "./provider/reviews-ratings";
+import SubscriptionPlans from "./provider/subscription-plans";
 
-  // Fetch current user info
-  const { data: currentUser, isLoading: isLoadingUser } = useQuery<User>({
-    queryKey: ["/api/users/me"],
-  });
+interface ProviderDashboardProps {
+  user: UserType | null;
+}
 
-  // Fetch appointments for the provider
-  const { data: appointments, isLoading: isLoadingAppointments } = useQuery<Appointment[]>({
-    queryKey: ["/api/appointments/me"],
-    enabled: !!currentUser?.id,
-  });
+export default function ProviderDashboard({ user }: ProviderDashboardProps) {
+  const [activeTab, setActiveTab] = useState("overview");
 
-  // Calculate appointment statistics
-  const appointmentStats = {
-    totalClients: appointments ? new Set(appointments.map(a => a.customerId)).size : 0,
-    completedServices: appointments?.filter(a => a.status === "completed").length || 0,
-    pendingRequests: appointments?.filter(a => a.status === "pending").length || 0,
+  // Stats for overview cards
+  const stats = {
+    totalServices: 5,
+    activeBookings: 3,
+    completedBookings: 27,
+    currentRating: 4.8,
+    totalReviews: 24,
+    thisMonthEarnings: 3250.75,
+    pendingPayouts: 1200.50,
+    unreadMessages: 5
   };
 
-  // Define columns for the appointment table
-  const appointmentColumns = [
-    {
-      accessorKey: "customerName",
-      header: "Client",
-      cell: ({ row }: any) => "Client #" + row.original.customerId,
-    },
-    {
-      accessorKey: "dateTime",
-      header: "Date & Time",
-      cell: ({ row }: any) => {
-        const date = new Date(row.original.dateTime);
-        return format(date, "MMM d, yyyy - h:mm a");
-      },
-    },
-    {
-      accessorKey: "serviceType",
-      header: "Service Type",
-    },
-    {
-      accessorKey: "status",
-      header: "Status",
-      cell: ({ row }: any) => {
-        const status = row.original.status;
-        let bgColor = "";
-        let textColor = "";
-        
-        switch (status) {
-          case "confirmed":
-            bgColor = "bg-green-100";
-            textColor = "text-green-800";
-            break;
-          case "pending":
-            bgColor = "bg-yellow-100";
-            textColor = "text-yellow-800";
-            break;
-          case "cancelled":
-            bgColor = "bg-red-100";
-            textColor = "text-red-800";
-            break;
-          case "completed":
-            bgColor = "bg-blue-100";
-            textColor = "text-blue-800";
-            break;
-          default:
-            bgColor = "bg-gray-100";
-            textColor = "text-gray-800";
-        }
-        
-        return (
-          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${bgColor} ${textColor}`}>
-            {status.charAt(0).toUpperCase() + status.slice(1)}
-          </span>
-        );
-      },
-    },
-    {
-      id: "actions",
-      header: "Actions",
-      cell: ({ row }: any) => (
-        <Button 
-          variant="link" 
-          size="sm" 
-          onClick={() => {
-            toast({
-              title: "View appointment",
-              description: `You clicked to view appointment #${row.original.id}`,
-            });
-          }}
-        >
-          View
-        </Button>
-      ),
-    },
-  ];
-
-  if (isLoadingUser || isLoadingAppointments) {
-    return (
-      <div className="flex items-center justify-center h-full py-16">
-        <Loader2 className="h-8 w-8 animate-spin text-secondary" />
-        <span className="ml-2">Loading dashboard...</span>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-8">
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <StatsCard
-          title="Total Clients"
-          value={appointmentStats.totalClients}
-          icon={<Users className="h-6 w-6 text-white" />}
-          linkText="View all clients"
-          linkHref="#clients"
-          color="secondary"
-        />
-        
-        <StatsCard
-          title="Completed Services"
-          value={appointmentStats.completedServices}
-          icon={<BarChart2 className="h-6 w-6 text-white" />}
-          linkText="View service history"
-          linkHref="#history"
-          color="green"
-        />
-        
-        <StatsCard
-          title="Pending Requests"
-          value={appointmentStats.pendingRequests}
-          icon={<Clock className="h-6 w-6 text-white" />}
-          linkText="View pending requests"
-          linkHref="#pending"
-          color="yellow"
-        />
+    <div className="space-y-6">
+      <h1 className="text-2xl font-bold tracking-tight">Service Provider Dashboard</h1>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Bookings</CardTitle>
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.activeBookings}</div>
+            <p className="text-xs text-muted-foreground">
+              {stats.completedBookings} completed
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Earnings</CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">N${stats.thisMonthEarnings.toLocaleString()}</div>
+            <p className="text-xs text-muted-foreground">
+              N${stats.pendingPayouts.toLocaleString()} pending payout
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Rating</CardTitle>
+            <Star className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.currentRating}/5.0</div>
+            <p className="text-xs text-muted-foreground">
+              {stats.totalReviews} reviews
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Messages</CardTitle>
+            <MessageSquare className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.unreadMessages}</div>
+            <p className="text-xs text-muted-foreground">
+              Unread customer messages
+            </p>
+          </CardContent>
+        </Card>
       </div>
-      
-      <div className="bg-white shadow rounded-lg overflow-hidden" id="appointments">
-        <div className="p-4 sm:p-6">
-          <h2 className="text-lg font-medium text-gray-900">Upcoming Appointments</h2>
-        </div>
-        
-        {appointments && appointments.length > 0 ? (
-          <DataTable 
-            columns={appointmentColumns} 
-            data={appointments.filter(a => a.status !== "completed" && a.status !== "cancelled")} 
-            pagination={pagination}
-            onPaginationChange={setPagination}
-          />
-        ) : (
-          <div className="p-4 text-center text-gray-500">No upcoming appointments found</div>
-        )}
-      </div>
+
+      <Tabs defaultValue="profile" className="space-y-4">
+        <TabsList className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7">
+          <TabsTrigger value="profile">Profile</TabsTrigger>
+          <TabsTrigger value="services">Services</TabsTrigger>
+          <TabsTrigger value="bookings">Bookings</TabsTrigger>
+          <TabsTrigger value="earnings">Earnings</TabsTrigger>
+          <TabsTrigger value="messages">Messages</TabsTrigger>
+          <TabsTrigger value="reviews">Reviews</TabsTrigger>
+          <TabsTrigger value="subscription">Subscription</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="profile" className="space-y-4">
+          <ProviderProfile user={user} />
+        </TabsContent>
+
+        <TabsContent value="services" className="space-y-4">
+          <ServiceManagement />
+        </TabsContent>
+
+        <TabsContent value="bookings" className="space-y-4">
+          <BookingCalendar />
+        </TabsContent>
+
+        <TabsContent value="earnings" className="space-y-4">
+          <EarningsPayout />
+        </TabsContent>
+
+        <TabsContent value="messages" className="space-y-4">
+          <CustomerMessages />
+        </TabsContent>
+
+        <TabsContent value="reviews" className="space-y-4">
+          <ReviewsRatings />
+        </TabsContent>
+
+        <TabsContent value="subscription" className="space-y-4">
+          <SubscriptionPlans />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
