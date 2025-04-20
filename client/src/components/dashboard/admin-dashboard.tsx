@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,6 +22,7 @@ import WithdrawalRequests from "./admin/withdrawal-requests";
 import PlatformSettings from "./admin/platform-settings";
 import LanguageSettings from "./admin/language-settings";
 import Notifications from "./admin/notifications";
+import AdminProfile from "./admin/admin-profile"; // Added import for AdminProfile
 
 interface AdminDashboardProps {
   user: UserType | null;
@@ -112,6 +112,7 @@ export default function AdminDashboard({ user }: AdminDashboardProps) {
           <TabsTrigger value="platform">Platform</TabsTrigger>
           <TabsTrigger value="language">Languages</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
+          <TabsTrigger value="profile">Profile</TabsTrigger> {/* Added Profile tab */}
         </TabsList>
 
         <TabsContent value="users" className="space-y-4">
@@ -160,6 +161,9 @@ export default function AdminDashboard({ user }: AdminDashboardProps) {
 
         <TabsContent value="notifications" className="space-y-4">
           <Notifications />
+        </TabsContent>
+        <TabsContent value="profile"> {/* Added Profile tab content */}
+          <AdminProfile user={user} />
         </TabsContent>
       </Tabs>
     </div>
