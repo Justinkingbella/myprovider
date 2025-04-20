@@ -145,6 +145,23 @@ export const messages = pgTable("messages", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
+// Promotions table
+export const promotions = pgTable("promotions", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  code: text("code").notNull().unique(),
+  type: text("type", { enum: ["discount", "referral", "cashback"] }).notNull(),
+  value: decimal("value", { precision: 5, scale: 2 }).notNull(),
+  startDate: timestamp("start_date").notNull(),
+  endDate: timestamp("end_date"),
+  description: text("description"),
+  status: text("status", { enum: ["active", "inactive", "expired"] }).notNull().default("active"),
+  usageLimit: integer("usage_limit"),
+  usageCount: integer("usage_count").default(0),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
 // Insert schemas for all tables
 export const insertUserSchema = createInsertSchema(users)
   .omit({
@@ -222,23 +239,6 @@ export const insertPromotionSchema = createInsertSchema(promotions)
     createdAt: true,
     updatedAt: true,
   });
-
-// Promotions table
-export const promotions = pgTable("promotions", {
-  id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  code: text("code").notNull().unique(),
-  type: text("type", { enum: ["discount", "referral", "cashback"] }).notNull(),
-  value: decimal("value", { precision: 5, scale: 2 }).notNull(),
-  startDate: timestamp("start_date").notNull(),
-  endDate: timestamp("end_date"),
-  description: text("description"),
-  status: text("status", { enum: ["active", "inactive", "expired"] }).notNull().default("active"),
-  usageLimit: integer("usage_limit"),
-  usageCount: integer("usage_count").default(0),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
-});
 
 // Schema with validation for user registration
 export const userRegistrationSchema = z.object({
