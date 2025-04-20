@@ -280,7 +280,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Webhook endpoint for Clerk events
   app.post("/api/webhooks/clerk", async (req: Request, res: Response) => {
     try {
-      const { type, data } = req.body;
+      // Get the webhook signature from the request headers
+      const svix_id = req.headers["svix-id"] as string;
+      const svix_timestamp = req.headers["svix-timestamp"] as string;
+      const svix_signature = req.headers["svix-signature"] as string;
+      
+      // If there's no signature, return 400
+      if (!svix_id || !svix_timestamp || !svix_signature) {
+        console.error("Missing Svix headers");
+        return res.status(400).json({ message: "Missing Svix headers" });
+      }
+      
+      // Get the body as text
+      const payload = JSON.stringify(req.body);
+      
+      // Create a new Webhook instance with your webhook secret
+      const webhookSecret = process.env.CLERK_WEBHOOK_SECRET || "";
+      const wh = new Webhook(webhookSecret);
+      
+      let evt;
+      try {
+        // Verify the webhook
+        evt = wh.verify(payload, {
+          "svix-id": svix_id,
+          "svix-timestamp": svix_timestamp,
+          "svix-signature": svix_signature,
+        } as WebhookRequiredHeaders);
+      } catch (err) {
+        console.error("Error verifying webhook:", err);
+        return res.status(400).json({ message: "Invalid webhook signature" });
+      }
+      
+      // Get event type and data
+      const { type, data } = evt.data;
       
       // Handle user creation
       if (type === "user.created") {
