@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { 
   Card, 
@@ -167,16 +166,16 @@ export default function ServiceSearch() {
     const matchesSearch = service.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          service.provider.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          service.category.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     // Filter by category
     const matchesCategory = !category || service.category === category;
-    
+
     // Filter by location
     const matchesLocation = !location || service.location === location;
-    
+
     // Filter by price range
     const matchesPrice = service.price >= priceRange[0] && service.price <= priceRange[1];
-    
+
     return matchesSearch && matchesCategory && matchesLocation && matchesPrice;
   });
 
@@ -218,7 +217,7 @@ export default function ServiceSearch() {
                 </Button>
               </div>
             </div>
-            
+
             {/* Filters */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
@@ -237,7 +236,7 @@ export default function ServiceSearch() {
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div>
                 <Label htmlFor="location-filter">Location</Label>
                 <Select value={location} onValueChange={setLocation}>
@@ -252,7 +251,7 @@ export default function ServiceSearch() {
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div>
                 <Label htmlFor="price-filter">Price Range (N$)</Label>
                 <div className="pt-4 px-2">
@@ -270,7 +269,7 @@ export default function ServiceSearch() {
                   </div>
                 </div>
               </div>
-              
+
               <div className="flex items-end">
                 <div className="flex items-center space-x-2">
                   <Checkbox 
@@ -282,7 +281,7 @@ export default function ServiceSearch() {
                 </div>
               </div>
             </div>
-            
+
             {/* Results - Grid View */}
             {viewType === "grid" && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
@@ -339,7 +338,7 @@ export default function ServiceSearch() {
                 ))}
               </div>
             )}
-            
+
             {/* Results - List View */}
             {viewType === "list" && (
               <div className="rounded-md border overflow-hidden">
@@ -426,7 +425,7 @@ export default function ServiceSearch() {
               Service details and booking options
             </DialogDescription>
           </DialogHeader>
-          
+
           {selectedService && (
             <div className="space-y-4">
               <div className="aspect-video w-full overflow-hidden rounded-md">
@@ -436,7 +435,7 @@ export default function ServiceSearch() {
                   className="w-full h-full object-cover"
                 />
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <div className="text-sm font-medium text-muted-foreground">Provider</div>
@@ -475,7 +474,7 @@ export default function ServiceSearch() {
                   </div>
                 </div>
               </div>
-              
+
               <div>
                 <div className="text-sm font-medium text-muted-foreground mb-1">Description</div>
                 <p className="text-sm">
@@ -486,7 +485,7 @@ export default function ServiceSearch() {
               </div>
             </div>
           )}
-          
+
           <DialogFooter className="flex gap-2 sm:gap-0">
             <Button variant="outline" className="flex-1">
               <Heart className="mr-2 h-4 w-4" />
@@ -499,210 +498,6 @@ export default function ServiceSearch() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
-  );
-}
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
-import { Search, Filter, MapPin, Star, Calendar, Clock } from "lucide-react";
-
-export default function ServiceSearch() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [category, setCategory] = useState("");
-  const [location, setLocation] = useState("");
-  const [priceRange, setPriceRange] = useState([0, 1000]);
-  const [rating, setRating] = useState("");
-  
-  // Mock data - in a real app, this would come from API
-  const mockServices = [
-    {
-      id: 1,
-      title: "Home Cleaning",
-      provider: "CleanPro Services",
-      category: "Cleaning",
-      price: 250,
-      priceType: "hourly",
-      rating: 4.8,
-      reviews: 126,
-      location: "Windhoek Central",
-      availability: "Today"
-    },
-    {
-      id: 2,
-      title: "Electrical Repairs",
-      provider: "PowerFix Solutions",
-      category: "Electrical",
-      price: 350,
-      priceType: "hourly",
-      rating: 4.7,
-      reviews: 89,
-      location: "Khomasdal",
-      availability: "Tomorrow"
-    },
-    {
-      id: 3,
-      title: "Plumbing Services",
-      provider: "FlowMaster Plumbing",
-      category: "Plumbing",
-      price: 300,
-      priceType: "hourly",
-      rating: 4.5,
-      reviews: 72,
-      location: "Katutura",
-      availability: "Next Week"
-    }
-  ];
-
-  return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Find Services</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col md:flex-row gap-4 mb-6">
-            <div className="relative flex-grow">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="text"
-                placeholder="Search services..."
-                className="pl-8"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            <Button>
-              <Search className="h-4 w-4 mr-2" />
-              Search
-            </Button>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            <div>
-              <label className="text-sm font-medium mb-1 block">Category</label>
-              <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="cleaning">Cleaning</SelectItem>
-                  <SelectItem value="electrical">Electrical</SelectItem>
-                  <SelectItem value="plumbing">Plumbing</SelectItem>
-                  <SelectItem value="gardening">Gardening</SelectItem>
-                  <SelectItem value="moving">Moving</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <label className="text-sm font-medium mb-1 block">Location</label>
-              <Select value={location} onValueChange={setLocation}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select location" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="windhoek">Windhoek Central</SelectItem>
-                  <SelectItem value="khomasdal">Khomasdal</SelectItem>
-                  <SelectItem value="katutura">Katutura</SelectItem>
-                  <SelectItem value="klein-windhoek">Klein Windhoek</SelectItem>
-                  <SelectItem value="eros">Eros</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <label className="text-sm font-medium mb-1 block">Rating</label>
-              <Select value={rating} onValueChange={setRating}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Any rating" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="4.5+">4.5 & Above</SelectItem>
-                  <SelectItem value="4+">4.0 & Above</SelectItem>
-                  <SelectItem value="3.5+">3.5 & Above</SelectItem>
-                  <SelectItem value="3+">3.0 & Above</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <label className="text-sm font-medium mb-1 block">Price Range (N$)</label>
-              <div className="pt-4 px-2">
-                <Slider
-                  value={priceRange}
-                  min={0}
-                  max={1000}
-                  step={50}
-                  onValueChange={setPriceRange}
-                />
-                <div className="flex justify-between mt-2 text-sm text-muted-foreground">
-                  <span>N${priceRange[0]}</span>
-                  <span>N${priceRange[1]}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="flex justify-between items-center">
-            <Button variant="outline" size="sm">
-              <Filter className="h-4 w-4 mr-2" />
-              More Filters
-            </Button>
-            <span className="text-sm text-muted-foreground">3 services found</span>
-          </div>
-        </CardContent>
-      </Card>
-      
-      <div className="space-y-4">
-        {mockServices.map((service) => (
-          <Card key={service.id} className="cursor-pointer hover:shadow-md transition-shadow">
-            <CardContent className="p-6">
-              <div className="flex flex-col md:flex-row gap-4">
-                <div className="md:w-1/4 bg-gray-100 rounded-md h-40 flex items-center justify-center">
-                  <span className="text-gray-400">Service Image</span>
-                </div>
-                <div className="md:w-3/4 space-y-4">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="text-xl font-semibold">{service.title}</h3>
-                      <p className="text-sm text-muted-foreground">by {service.provider}</p>
-                    </div>
-                    <div className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">
-                      <Star className="h-4 w-4 mr-1 fill-primary text-primary" />
-                      <span>{service.rating}</span>
-                      <span className="text-muted-foreground ml-1">({service.reviews})</span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex flex-wrap gap-y-2 gap-x-4 text-sm">
-                    <div className="flex items-center">
-                      <MapPin className="h-4 w-4 mr-1 text-muted-foreground" />
-                      <span>{service.location}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Calendar className="h-4 w-4 mr-1 text-muted-foreground" />
-                      <span>Available: {service.availability}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <Clock className="h-4 w-4 mr-1 text-muted-foreground" />
-                      <span>{service.priceType === 'hourly' ? 'Hourly Rate' : 'Fixed Price'}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex justify-between items-center">
-                    <div className="text-lg font-bold">N${service.price} <span className="text-sm font-normal text-muted-foreground">{service.priceType === 'hourly' ? '/hour' : ''}</span></div>
-                    <div className="space-x-2">
-                      <Button variant="outline" size="sm">View Details</Button>
-                      <Button size="sm">Book Now</Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
     </div>
   );
 }
