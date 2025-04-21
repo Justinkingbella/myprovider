@@ -1,0 +1,38 @@
+Verification result: p {id: 'sua_2w10Lww77oG8H3wkmKenUF5xASc', pathRoot: '/client/sign_ups', status: 'missing_requirements', requiredFields: Array(5), optionalFields: Array(2), …}abandonAt: 1745280120941attemptEmailAddressVerification: e=>this.attemptVerification({...e,strategy:"email_code"})attemptPhoneNumberVerification: e=>this.attemptVerification({...e,strategy:"phone_code"})attemptVerification: e=>this._basePost({body:e,action:"attempt_verification"})attemptWeb3WalletVerification: async e=> {…}authenticateWithCoinbaseWallet: async e=> {…}authenticateWithMetamask: async e=> {…}authenticateWithOKXWallet: async e=> {…}authenticateWithPopup: async e=> {…}authenticateWithRedirect: async e=>this.authenticateWithRedirectOrPopup(e,s.T7)authenticateWithRedirectOrPopup: async(e,t)=> {…}authenticateWithWeb3: async e=> {…}create: async e=> {…}createEmailLinkFlow: ()=> {…}createdSessionId: nullcreatedUserId: nullemailAddress: "jjpro7736@gmail.com"externalAccount: undefinedfirstName: "tera"hasPassword: undefinedid: "sua_2w10Lww77oG8H3wkmKenUF5xASc"lastName: "lita"legalAcceptedAt: nullmissingFields: ['username']optionalFields: (2) ['oauth_google', 'oauth_github']pathRoot: "/client/sign_ups"phoneNumber: nullprepareEmailAddressVerification: e=>this.prepareVerification(e||{strategy:"email_code"})preparePhoneNumberVerification: e=>this.prepareVerification(e||{strategy:"phone_code"})prepareVerification: e=>this._basePost({body:e,action:"prepare_verification"})prepareWeb3WalletVerification: e=> {…}requiredFields: (5) ['password', 'last_name', 'first_name', 'email_address', 'username']status: "missing_requirements"unsafeMetadata: {}unverifiedFields: []update: e=>this._basePatch({body:(0,d.q)(e)})upsert: e=>this.id?this.update(e):this.create(e)username: nullvalidatePassword: (e,t)=> {…}verifications: d {emailAddress: h, phoneNumber: h, web3Wallet: h, externalAccount: l}web3wallet: null[[Prototype]]: d
+clerk.browser.js:1 
+            
+            
+           POST https://advanced-glowworm-23.clerk.accounts.dev/v1/client/sign_ups/sua_2w10Lww77oG8H3wkmKenUF5xASc/attempt_verification?__clerk_api_version=2025-04-10&_clerk_js_version=5.61.2&__clerk_db_jwt=dvb_2w0cNrSqkIAyUx8qL0FajWrLDOI 400 (Bad Request)
+a.retryImmediately @ clerk.browser.js:1
+o @ clerk.browser.js:1
+o @ clerk.browser.js:1
+await in o
+_baseFetch @ clerk.browser.js:1
+(anonymous) @ clerk.browser.js:1
+execute @ clerk.browser.js:1
+_fetch @ clerk.browser.js:1
+_baseMutate @ clerk.browser.js:1
+_basePost @ clerk.browser.js:1
+(anonymous) @ clerk.browser.js:1
+(anonymous) @ clerk.browser.js:1
+handleVerification @ verification-step.tsx:45
+callCallback2 @ chunk-RPCDYKBN.js?v=7a147459:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=7a147459:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=7a147459:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=7a147459:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=7a147459:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=7a147459:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=7a147459:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=7a147459:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=7a147459:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=7a147459:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=7a147459:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=7a147459:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=7a147459:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=7a147459:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=7a147459:5449
+verification-step.tsx:95 Verification error: e: This verification has already been verified.
+    at d._baseFetch (https://advanced-glowworm-23.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js:1:10487)
+    at async c.execute (https://advanced-glowworm-23.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js:1:7723)
+    at async p._baseMutate (https://advanced-glowworm-23.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js:1:11190)
+    at async handleVerification (https://8fb7b0d1-ef85-407c-bc2e-753cfc927594-00-upm21ko6y23j.picard.replit.dev/src/components/auth/verification-step.tsx:51:34)
