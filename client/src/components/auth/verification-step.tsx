@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useSignUp } from "@clerk/clerk-react";
 import { Input } from "@/components/ui/input";
@@ -23,11 +22,13 @@ export default function VerificationStep({
 }: VerificationStepProps) {
   const [verificationCode, setVerificationCode] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
+  const [error, setError] = useState<string | null>(null); // Added error state
   const { signUp } = useSignUp();
   const { toast } = useToast();
   const [, setLocation] = useLocation();
 
   const handleVerification = async () => {
+    setError(null); // Clear any previous errors
     if (!verificationCode) {
       toast({
         title: "Verification code required",
@@ -39,14 +40,14 @@ export default function VerificationStep({
 
     try {
       setIsVerifying(true);
-      
+
       // Attempt verification with the code
       const verificationResult = await signUp?.attemptEmailAddressVerification({
         code: verificationCode,
       });
-      
+
       console.log("Verification result:", verificationResult);
-      
+
       if (verificationResult?.status === "complete") {
         // Create user in database
         try {
@@ -58,12 +59,12 @@ export default function VerificationStep({
             clerkId: verificationResult.createdUserId,
             role,
           });
-          
+
           toast({
             title: "Account verified!",
             description: "Your account has been verified successfully.",
           });
-          
+
           // Redirect to dashboard after a short delay
           setTimeout(() => {
             window.location.href = "/dashboard";
@@ -76,13 +77,14 @@ export default function VerificationStep({
             title: "Account verified!",
             description: "Your account has been verified successfully.",
           });
-          
+
           setTimeout(() => {
             window.location.href = "/dashboard";
           }, 1000);
         }
       } else {
         // Handle incomplete verification
+        setError("Invalid verification code"); // Set a more specific error message
         toast({
           title: "Verification incomplete",
           description: "Please check your code and try again.",
@@ -91,16 +93,19 @@ export default function VerificationStep({
       }
     } catch (err: any) {
       console.error("Verification error:", err);
-      toast({
-        title: "Verification failed",
-        description: err.message || "Please check your code and try again.",
-        variant: "destructive",
-      });
+      // Improve error handling for verification errors
+      if (err.errors && err.errors.length > 0) {
+        setError(err.errors[0].message || "Invalid verification code");
+      } else if (err.message) {
+        setError(err.message);
+      } else {
+        setError("Failed to verify code. Please try again.");
+      }
     } finally {
       setIsVerifying(false);
     }
   };
-  
+
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-medium">Verify your email</h3>
@@ -108,6 +113,7 @@ export default function VerificationStep({
         We've sent a verification code to <strong>{email}</strong>. 
         Please enter it below to complete your registration.
       </p>
+      {error && <p className="text-red-500 text-sm">{error}</p>} {/* Display error message */}
       <Input
         value={verificationCode}
         onChange={(e) => setVerificationCode(e.target.value)}

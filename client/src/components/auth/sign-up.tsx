@@ -52,6 +52,25 @@ export default function SignUpForm() {
     }
     
     try {
+      // Reset error
+      setError(null);
+      
+      // Basic validation before Zod to provide clearer feedback
+      if (password.length < 8) {
+        setError("Password must be at least 8 characters");
+        return;
+      }
+      
+      if (!/[0-9]/.test(password)) {
+        setError("Password must contain at least one number");
+        return;
+      }
+      
+      if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+        setError("Password must contain at least one special character");
+        return;
+      }
+      
       // Validate form using Zod schema
       userRegistrationSchema.parse({
         firstName,
