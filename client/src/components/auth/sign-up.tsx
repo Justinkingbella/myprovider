@@ -55,30 +55,46 @@ export default function SignUpForm() {
       // Reset error
       setError(null);
       
-      // Basic validation before Zod to provide clearer feedback
+      // Custom validation to provide clearer feedback
+      const passwordErrors = [];
+      
       if (password.length < 8) {
-        setError("Password must be at least 8 characters");
-        return;
+        passwordErrors.push("Password must be at least 8 characters");
       }
       
       if (!/[0-9]/.test(password)) {
-        setError("Password must contain at least one number");
-        return;
+        passwordErrors.push("Password must contain at least one number");
       }
       
       if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-        setError("Password must contain at least one special character");
+        passwordErrors.push("Password must contain at least one special character");
+      }
+      
+      if (passwordErrors.length > 0) {
+        setError(passwordErrors.join(". "));
         return;
       }
       
+      // Generate a username if not manually specified
+      const username = email.split("@")[0];
+      
       // Validate form using Zod schema
-      userRegistrationSchema.parse({
-        firstName,
-        lastName,
-        email,
-        password,
-        role
-      });
+      try {
+        userRegistrationSchema.parse({
+          firstName,
+          lastName,
+          email,
+          password,
+          role,
+          username
+        });
+      } catch (zodErr: any) {
+        console.error("Validation error:", zodErr);
+        if (zodErr.errors && zodErr.errors.length > 0) {
+          setError(zodErr.errors[0].message);
+          return;
+        }
+      }
       
       setIsLoading(true);
       

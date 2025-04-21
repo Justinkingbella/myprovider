@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useSignUp } from "@clerk/clerk-react";
+import { useState, useEffect } from "react";
+import { useSignUp, useClerk } from "@clerk/clerk-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -22,13 +22,48 @@ export default function VerificationStep({
 }: VerificationStepProps) {
   const [verificationCode, setVerificationCode] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
-  const [error, setError] = useState<string | null>(null); // Added error state
+  const [error, setError] = useState<string | null>(null);
   const { signUp } = useSignUp();
+  const clerk = useClerk();
   const { toast } = useToast();
   const [, setLocation] = useLocation();
 
+  useEffect(() => {
+    // Check if signUp status is already complete
+    if (signUp?.status === "complete" && signUp?.createdUserId) {
+      handleSuccessfulVerification(signUp.createdUserId);
+    }
+  }, [signUp?.status]);
+
+  const handleSuccessfulVerification = async (userId: string) => {
+    try {
+      // Create user in database
+      await apiRequest("POST", "/api/users", {
+        username: email.split("@")[0],
+        email,
+        firstName,
+        lastName,
+        clerkId: userId,
+        role,
+      });
+    } catch (dbErr: any) {
+      console.error("Database error:", dbErr);
+      // Likely the user already exists, which is fine
+    } finally {
+      toast({
+        title: "Account verified!",
+        description: "Your account has been created successfully.",
+      });
+      
+      // Redirect to dashboard
+      setTimeout(() => {
+        window.location.href = "/dashboard";
+      }, 1500);
+    }
+  };
+
   const handleVerification = async () => {
-    setError(null); // Clear any previous errors
+    setError(null);
     if (!verificationCode) {
       toast({
         title: "Verification code required",
@@ -49,42 +84,9 @@ export default function VerificationStep({
       console.log("Verification result:", verificationResult);
 
       if (verificationResult?.status === "complete") {
-        // Create user in database
-        try {
-          await apiRequest("POST", "/api/users", {
-            username: email.split("@")[0],
-            email,
-            firstName,
-            lastName,
-            clerkId: verificationResult.createdUserId,
-            role,
-          });
-
-          toast({
-            title: "Account verified!",
-            description: "Your account has been verified successfully.",
-          });
-
-          // Redirect to dashboard after a short delay
-          setTimeout(() => {
-            window.location.href = "/dashboard";
-          }, 1000);
-        } catch (dbErr: any) {
-          console.error("Database error:", dbErr);
-          // The user might already exist in the database due to webhooks
-          // So we'll still redirect to dashboard
-          toast({
-            title: "Account verified!",
-            description: "Your account has been verified successfully.",
-          });
-
-          setTimeout(() => {
-            window.location.href = "/dashboard";
-          }, 1000);
-        }
+        await handleSuccessfulVerification(verificationResult.createdUserId || "");
       } else {
-        // Handle incomplete verification
-        setError("Invalid verification code"); // Set a more specific error message
+        setError("Invalid verification code");
         toast({
           title: "Verification incomplete",
           description: "Please check your code and try again.",
@@ -93,8 +95,30 @@ export default function VerificationStep({
       }
     } catch (err: any) {
       console.error("Verification error:", err);
-      // Improve error handling for verification errors
-      if (err.errors && err.errors.length > 0) {
+      
+      // Check for "already verified" error, which is actually a success case
+      if (err.message && err.message.includes("already been verified")) {
+        try {
+          // If already verified, try to sign in directly
+          if (signUp?.createdUserId) {
+            await handleSuccessfulVerification(signUp.createdUserId);
+          } else {
+            toast({
+              title: "Already verified",
+              description: "Your account is verified. Please sign in.",
+            });
+            setTimeout(() => {
+              window.location.href = "/sign-in";
+            }, 1500);
+          }
+        } catch (signInErr) {
+          console.error("Sign in error:", signInErr);
+          // Redirect to sign-in page
+          setTimeout(() => {
+            window.location.href = "/sign-in";
+          }, 1500);
+        }
+      } else if (err.errors && err.errors.length > 0) {
         setError(err.errors[0].message || "Invalid verification code");
       } else if (err.message) {
         setError(err.message);
@@ -113,7 +137,7 @@ export default function VerificationStep({
         We've sent a verification code to <strong>{email}</strong>. 
         Please enter it below to complete your registration.
       </p>
-      {error && <p className="text-red-500 text-sm">{error}</p>} {/* Display error message */}
+      {error && <p className="text-red-500 text-sm">{error}</p>}
       <Input
         value={verificationCode}
         onChange={(e) => setVerificationCode(e.target.value)}
